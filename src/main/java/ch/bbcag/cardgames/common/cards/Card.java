@@ -60,6 +60,7 @@ public class Card {
             case 'J' -> face = Face.JACK;
             case 'Q' -> face = Face.QUEEN;
             case 'K' -> face = Face.KING;
+            case 'A' -> face = Face.ASS;
         }
     }
 
