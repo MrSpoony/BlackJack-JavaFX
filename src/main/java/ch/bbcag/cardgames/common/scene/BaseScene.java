@@ -27,6 +27,7 @@ public abstract class BaseScene extends Scene implements Initialization{
     }
 
     private void setupScene() {
+        gc = canvas.getGraphicsContext2D();
         getGroup().getChildren().add(canvas);
         setOnKeyPressed(keyEventHandler);
         setOnKeyReleased(keyEventHandler);
