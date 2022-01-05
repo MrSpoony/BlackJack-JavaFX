@@ -1,35 +1,42 @@
 package ch.bbcag.cardgames.common.cards;
 
+import ch.bbcag.cardgames.common.cards.enums.Suit;
+import ch.bbcag.cardgames.common.cards.enums.Face;
 import javafx.scene.image.Image;
+
+import java.util.Objects;
 
 public class Card {
 
+    private static final String POKER_IMAGE_PATH = "/pokerdeck/";
+
     private int value;
-    private Color color;
+    private Suit suit;
     private Face face;
     private Image image;
     private String imagePath;
 
     public Card(String imagePath) {
-        this.imagePath = imagePath;
+        this.imagePath = POKER_IMAGE_PATH + imagePath;
+        image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(this.imagePath)));
         setColor();
         setValue();
         setFace();
     }
 
     private void setColor() {
-        char col = imagePath.charAt(1);
+        char col = imagePath.charAt(POKER_IMAGE_PATH.length() + 1);
         switch (col) {
-            case 'C' -> color = Color.CLUBS;
-            case 'D' -> color = Color.DIAMONDS;
-            case 'H' -> color = Color.HEARTS;
-            case 'S' -> color = Color.SPADES;
+            case 'C' -> suit = Suit.CLUBS;
+            case 'D' -> suit = Suit.DIAMONDS;
+            case 'H' -> suit = Suit.HEARTS;
+            case 'S' -> suit = Suit.SPADES;
             default -> throw new IllegalArgumentException("Wrong image path, is not in Format [Value][Color]");
         }
     }
 
     private void setValue() {
-        char val = imagePath.charAt(0);
+        char val = imagePath.charAt(POKER_IMAGE_PATH.length());
         switch (val) {
             case '1', '2', '3', '4', '5', '6', '7', '8', '9' -> value = Character.getNumericValue(val);
             case 'T', 'J', 'K', 'Q' -> value = 10;
@@ -38,7 +45,7 @@ public class Card {
     }
 
     private void setFace() {
-        char fac = imagePath.charAt(0);
+        char fac = imagePath.charAt(POKER_IMAGE_PATH.length());
         switch (fac) {
             case '1' -> face = Face.ONE;
             case '2' -> face = Face.TWO;
@@ -54,5 +61,9 @@ public class Card {
             case 'Q' -> face = Face.QUEEN;
             case 'K' -> face = Face.KING;
         }
+    }
+
+    public Image getImage() {
+        return image;
     }
 }
