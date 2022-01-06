@@ -14,7 +14,7 @@ public class Dealer extends Player {
     }
 
     @Override
-    public void drawNext() {
+    public void turn() {
         while (dealerHandValue < DEALER_MUST_STAY) {
             takeCard();
             dealerHandValue = getCount(Count.HIGH);
