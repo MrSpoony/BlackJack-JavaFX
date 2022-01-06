@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Stack extends CopyOnWriteArrayList<Card> implements List<Card> {
 
+    private static final DeckName BLACKJACK_DECK = DeckName.POKER;
     private List<Card> drawnCards = new CopyOnWriteArrayList<>();
 
     private int numberOfDecks;
@@ -21,7 +22,7 @@ public class Stack extends CopyOnWriteArrayList<Card> implements List<Card> {
     private void createStack() {
         List<Deck> decks = new CopyOnWriteArrayList<>();
         for (int i = 0; i < numberOfDecks; i++) {
-            decks.add(new Deck(DeckName.POKER));
+            decks.add(new Deck(BLACKJACK_DECK));
         }
         for (Deck deck : decks) {
             this.addAll(deck);
@@ -41,5 +42,4 @@ public class Stack extends CopyOnWriteArrayList<Card> implements List<Card> {
             throw new NullPointerException("For this operation deck cannot be empty!");
         }
     }
-
 }
