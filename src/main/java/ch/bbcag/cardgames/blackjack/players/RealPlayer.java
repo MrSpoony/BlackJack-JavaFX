@@ -2,7 +2,7 @@ package ch.bbcag.cardgames.blackjack.players;
 
 import ch.bbcag.cardgames.blackjack.Stack;
 
-public class RealPlayer extends Player{
+public class RealPlayer extends Player {
 
     private boolean hit;
 
