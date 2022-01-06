@@ -16,7 +16,7 @@ public abstract class Player implements PlayerActions {
     private List<Card> cards = new ArrayList<>();
 
     private int bet;
-    private boolean done = false;
+    protected boolean done = false;
 
     public Player(Stack stack) {
         this.stack = stack;
@@ -35,6 +35,10 @@ public abstract class Player implements PlayerActions {
         bet *= 2;
         takeCard();
         done = true;
+    }
+
+    public boolean isOver(int count) {
+        return count >= VALUE_TO_WIN;
     }
 
     protected void takeCard() {
