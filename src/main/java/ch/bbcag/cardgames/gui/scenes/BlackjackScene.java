@@ -17,13 +17,16 @@ public class BlackjackScene extends BackgroundScene {
         super(navigator);
     }
 
-    private final TransparentButton btnSplit = new TransparentButton("btnSplit");
-    private final TransparentButton btnDouble = new TransparentButton("btnDouble");
-    private final TransparentButton btnHit = new TransparentButton("btnHit");
-    private final TransparentButton btnHold = new TransparentButton("btnHold");
+    private final TransparentButton btnSplit = new TransparentButton("Split");
+    private final TransparentButton btnDouble = new TransparentButton("Double");
+    private final TransparentButton btnHit = new TransparentButton("Hit");
+    private final TransparentButton btnHold = new TransparentButton("Hold");
 
     private final Label money = new Label("Money:");
     private final Label subtotal = new Label("Subtotal:");
+
+    private double marginforAnchorPain = 10.0;
+    private int fontSize = 25;
 
     @Override
     public void update(double deltaInSec) {
@@ -40,20 +43,22 @@ public class BlackjackScene extends BackgroundScene {
         HBox mainHbox = new HBox();
 
 
-        money.setFont(new Font("Arial", 25));
-        subtotal.setFont(new Font("Arial", 25));
+        money.setFont(new Font("Arial", fontSize));
+        subtotal.setFont(new Font("Arial", fontSize));
         money.setTextFill(Color.web("#000000"));
         subtotal.setTextFill(Color.web("#000000"));
 
         mainAnchorPain.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
-        AnchorPane.setTopAnchor(money, 10.0);
-        AnchorPane.setBottomAnchor(subtotal, 10.0);
+        AnchorPane.setTopAnchor(money, marginforAnchorPain);
+        AnchorPane.setBottomAnchor(subtotal, marginforAnchorPain);
 
         mainHbox.getChildren().addAll(btnHit, btnHold, btnDouble, btnSplit);
         mainAnchorPain.getChildren().addAll(money, subtotal, mainHbox);
 
-        AnchorPane.setRightAnchor(mainHbox, 10.0);
-        AnchorPane.setBottomAnchor(mainHbox, 10.0);
+
+
+        AnchorPane.setRightAnchor(mainHbox, marginforAnchorPain);
+        AnchorPane.setBottomAnchor(mainHbox, marginforAnchorPain);
 
 
         getGroup().getChildren().add(mainAnchorPain);
