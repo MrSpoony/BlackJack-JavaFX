@@ -1,13 +1,12 @@
-package ch.bbcag.cardgames.blackjack;
+package ch.bbcag.cardgames.blackjack.players;
 
+import ch.bbcag.cardgames.blackjack.Stack;
 import ch.bbcag.cardgames.common.cards.Card;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
-
-    private static final int DEAL_UNTIL_REACHED = 17;
+public abstract class Player {
 
     private Stack stack;
 
@@ -25,5 +24,4 @@ public class Player {
     public boolean isSplitPossible(){
         return cards.get(0) == cards.get(1);
     }
-
 }
