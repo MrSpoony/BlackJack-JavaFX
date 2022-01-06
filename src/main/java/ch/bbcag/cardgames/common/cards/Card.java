@@ -64,6 +64,14 @@ public class Card {
         }
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public Suit getSuit() {
+        return suit;
+    }
+
     public Image getImage() {
         return image;
     }
