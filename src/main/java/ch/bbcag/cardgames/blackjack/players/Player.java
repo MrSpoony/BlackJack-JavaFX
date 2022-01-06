@@ -13,18 +13,36 @@ import static ch.bbcag.cardgames.blackjack.Blackjack.VALUE_TO_WIN;
 public abstract class Player implements PlayerActions {
 
     private Stack stack;
-
     private List<Card> cards = new ArrayList<>();
+
+    private int bet;
+    private boolean done = false;
 
     public Player(Stack stack) {
         this.stack = stack;
     }
 
+    public boolean isSplitPossible() {
+        return cards.get(0) == cards.get(1);
+    }
+
+    public abstract void turn();
+
+    public void split() {
+    }
+
+    public void doDoubleDown() {
+        bet *= 2;
+        takeCard();
+        done = true;
+    }
+
     protected void takeCard() {
         cards.add(stack.drawCard());
     }
-    public boolean isSplitPossible(){
-        return cards.get(0) == cards.get(1);
+
+    protected void pass() {
+
     }
 
     protected int getCount(Count highOrLowValue) {
@@ -41,19 +59,18 @@ public abstract class Player implements PlayerActions {
             default -> throw new IllegalStateException("highOrLowValue is not part of the Card enum");
         }
     }
-    public abstract void drawNext();
-    public abstract void split();
 
     private int getHighCount() {
         int count = 0;
-        for(Card card : cards) {
+        for (Card card : cards) {
             count += card.getValue();
         }
         return count;
     }
+
     private int getBestCount() {
         int count = 0;
-        for(Card card : cards) {
+        for (Card card : cards) {
             if (card.getFace() != Face.ASS) {
                 count += card.getValue();
             }
@@ -72,7 +89,7 @@ public abstract class Player implements PlayerActions {
 
     private int getLowCount() {
         int count = 0;
-        for(Card card : cards) {
+        for (Card card : cards) {
             if (card.getFace() == Face.ASS) {
                 count++;
             } else {
