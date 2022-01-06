@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Deck {
+public class Deck extends CopyOnWriteArrayList<Card> implements List<Card> {
 
     private static final int NUMBER_OF_POKER_FACES = 13;
     private static final int NUMBER_OF_POKER_SUITS = 4;
@@ -18,7 +18,6 @@ public class Deck {
     private int numberOfSuits;
     private int startNumber;
 
-    private List<Card> deck = new CopyOnWriteArrayList<>();
     private DeckName deckName;
 
     public Deck(DeckName deckName) {
@@ -29,7 +28,7 @@ public class Deck {
 
     public Card getRandomCard() {
         Random random = new Random();
-        return deck.get(random.nextInt(deck.size()));
+        return get(random.nextInt(size()));
     }
 
     private void setVariables() {
@@ -70,12 +69,8 @@ public class Deck {
                     default -> throw new IllegalStateException("Unexpected value: " + i % 4);
                 }
                 String fullPath = prefix + suffix + IMAGE_ENDING;
-                deck.add(new Card(fullPath));
+                add(new Card(fullPath));
             }
         }
-    }
-
-    public List<Card> getDeck() {
-        return deck;
     }
 }
