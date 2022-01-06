@@ -1,7 +1,6 @@
 package ch.bbcag.cardgames.common.scene;
 
 import ch.bbcag.cardgames.common.eventhandler.KeyEventHandler;
-import ch.bbcag.cardgames.common.eventhandler.MouseEventHandler;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,7 +17,6 @@ public abstract class BaseScene extends Scene implements Initialization{
     public static GraphicsContext gc;
     protected static Canvas canvas = new Canvas(SCREEN_WIDTH, SCREEN_HEIGHT);
     protected KeyEventHandler keyEventHandler = new KeyEventHandler();
-    protected MouseEventHandler mouseEventHandler = new MouseEventHandler();
     protected boolean exiting = false;
 
     private long lastTimeInNanoSec;

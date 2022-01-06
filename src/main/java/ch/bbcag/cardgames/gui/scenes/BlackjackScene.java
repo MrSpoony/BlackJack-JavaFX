@@ -1,6 +1,10 @@
 package ch.bbcag.cardgames.gui.scenes;
 
 
+import ch.bbcag.cardgames.blackjack.buttonhandler.DoubleButtonHandler;
+import ch.bbcag.cardgames.blackjack.buttonhandler.HitButtonHandler;
+import ch.bbcag.cardgames.blackjack.buttonhandler.HoldButtonHandler;
+import ch.bbcag.cardgames.blackjack.buttonhandler.SplitButtonHandler;
 import ch.bbcag.cardgames.common.scene.BaseScene;
 import ch.bbcag.cardgames.common.scene.Navigator;
 import javafx.scene.control.Button;
@@ -16,6 +20,11 @@ public class BlackjackScene extends BackgroundScene{
         super(navigator);
     }
 
+    private final SplitButtonHandler splitEventHandler = new SplitButtonHandler();
+    private final DoubleButtonHandler doubleEventHandler = new DoubleButtonHandler();
+    private final HitButtonHandler hitEventHandler = new HitButtonHandler();
+    private final HoldButtonHandler holdEventHandler = new HoldButtonHandler();
+
     private final Button btnSplit = new Button();
     private final Button btnDouble = new Button();
     private final Button btnHit = new Button();
@@ -28,10 +37,10 @@ public class BlackjackScene extends BackgroundScene{
     @Override
     public void update(double deltaInSec) {
 
-        btnSplit.setOnMouseClicked(mouseEventHandler);
-        btnDouble.setOnMouseClicked(mouseEventHandler);
-        btnHit.setOnMouseClicked(mouseEventHandler);
-        btnHold.setOnMouseClicked(mouseEventHandler);
+        btnSplit.setOnMouseClicked(splitEventHandler);
+        btnDouble.setOnMouseClicked(doubleEventHandler);
+        btnHit.setOnMouseClicked(hitEventHandler);
+        btnHold.setOnMouseClicked(holdEventHandler);
     }
 
     @Override
