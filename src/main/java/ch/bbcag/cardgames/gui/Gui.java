@@ -19,6 +19,6 @@ public class Gui extends BaseScene{
 
     @Override
     public void paint() {
-        
+
     }
 }
