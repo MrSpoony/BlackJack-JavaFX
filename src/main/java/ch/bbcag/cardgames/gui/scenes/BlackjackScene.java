@@ -1,6 +1,7 @@
 package ch.bbcag.cardgames.gui.scenes;
 
 
+import ch.bbcag.cardgames.blackjack.Blackjack;
 import ch.bbcag.cardgames.blackjack.buttonhandler.DoubleButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HitButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HoldButtonHandler;
@@ -16,14 +17,14 @@ import javafx.scene.text.Font;
 
 public class BlackjackScene extends BackgroundScene{
 
-    public BlackjackScene(Navigator navigator) {
-        super(navigator);
-    }
+    private static final int NUMBER_OF_REAL_PLAYERS = 1;
 
-    private final SplitButtonHandler splitEventHandler = new SplitButtonHandler();
-    private final DoubleButtonHandler doubleEventHandler = new DoubleButtonHandler();
-    private final HitButtonHandler hitEventHandler = new HitButtonHandler();
-    private final HoldButtonHandler holdEventHandler = new HoldButtonHandler();
+    private Blackjack mainBlackjack = new Blackjack(NUMBER_OF_REAL_PLAYERS);
+
+    private final SplitButtonHandler splitEventHandler = new SplitButtonHandler(mainBlackjack.getCurrentRealPlayer());
+    private final DoubleButtonHandler doubleEventHandler = new DoubleButtonHandler(mainBlackjack.getCurrentRealPlayer());
+    private final HitButtonHandler hitEventHandler = new HitButtonHandler(mainBlackjack.getCurrentRealPlayer());
+    private final HoldButtonHandler holdEventHandler = new HoldButtonHandler(mainBlackjack.getCurrentRealPlayer());
 
     private final Button btnSplit = new Button();
     private final Button btnDouble = new Button();
@@ -33,6 +34,9 @@ public class BlackjackScene extends BackgroundScene{
     private final Label money = new Label("Money:");
     private final Label subtotal = new Label("Subtotal:");
 
+    public BlackjackScene(Navigator navigator) {
+        super(navigator);
+    }
 
     @Override
     public void update(double deltaInSec) {
