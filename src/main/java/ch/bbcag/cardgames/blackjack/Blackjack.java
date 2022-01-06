@@ -1,6 +1,7 @@
 package ch.bbcag.cardgames.blackjack;
 
 import ch.bbcag.cardgames.blackjack.players.Bot;
+import ch.bbcag.cardgames.blackjack.players.Dealer;
 import ch.bbcag.cardgames.blackjack.players.Player;
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
 
@@ -26,12 +27,21 @@ public class Blackjack {
     }
 
     private void setupPlayers() {
-        players.add(new Dealer(mainStack));
         for (int i = 0; i < numberOfRealPlayers; i++) {
             players.add(new RealPlayer(mainStack));
         }
         for (int i = 0; i < numberOfBots; i++) {
             players.add(new Bot(mainStack));
         }
+        players.add(new Dealer(mainStack));
+    }
+
+    public RealPlayer getCurrentRealPlayer() {
+        for (Player player : players) {
+            if (player instanceof RealPlayer) {
+                return (RealPlayer) player;
+            }
+        }
+        throw new IllegalStateException("There is no real player");
     }
 }
