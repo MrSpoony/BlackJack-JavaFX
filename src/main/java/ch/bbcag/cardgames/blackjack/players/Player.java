@@ -6,7 +6,7 @@ import ch.bbcag.cardgames.common.cards.Card;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Player {
+public abstract class Player implements PlayerActions {
 
     private Stack stack;
 
@@ -24,4 +24,7 @@ public abstract class Player {
     public boolean isSplitPossible(){
         return cards.get(0) == cards.get(1);
     }
+
+    public abstract void drawNext();
+    public abstract void split();
 }
