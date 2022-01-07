@@ -21,7 +21,7 @@ public class RealPlayer extends Player {
 
     @Override
     public void split() {
-
+        doSplit();
     }
 
     public void setHit(boolean hit) {
