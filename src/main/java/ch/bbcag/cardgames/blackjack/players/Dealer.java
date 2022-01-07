@@ -14,10 +14,15 @@ public class Dealer extends Player {
 
     @Override
     public void turn() {
-        while (dealerHandValue < DEALER_MUST_STAY) {
-            takeCard();
-            dealerHandValue = getCount(Count.HIGH);
+        if (!hasToTakeCard()) {
+            done = true;
+            return;
         }
+        takeCard();
+    }
+
+    public boolean hasToTakeCard() {
+        return getCount(Count.HIGH) >= 17;
     }
 
     @Override
