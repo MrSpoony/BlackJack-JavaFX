@@ -3,13 +3,11 @@ package ch.bbcag.cardgames.gui.scenes;
 
 import ch.bbcag.cardgames.common.scene.BaseScene;
 import ch.bbcag.cardgames.common.scene.Navigator;
+import ch.bbcag.cardgames.gui.common.LabelLayout;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class BlackjackScene extends BackgroundScene {
 
@@ -22,11 +20,16 @@ public class BlackjackScene extends BackgroundScene {
     private final TransparentButton btnHit = new TransparentButton("Hit");
     private final TransparentButton btnHold = new TransparentButton("Hold");
 
-    private final Label money = new Label("Money:");
-    private final Label subtotal = new Label("Subtotal:");
+    private final LabelLayout moneyLbl = new LabelLayout("Money:");
+    private final LabelLayout subtotalLbl = new LabelLayout("Subtotal:");
+    private final LabelLayout moneyInsertLbl = new LabelLayout("Your Insert:");
 
-    private double marginforAnchorPain = 10.0;
-    private int fontSize = 25;
+    private final TextField moneyInsertTxt = new TextField("Enter your Money Insert");
+
+    private final double marginforAnchorPain = 10.0;
+    private final double marginForMoneyInserts = 75.0;
+
+
 
     @Override
     public void update(double deltaInSec) {
@@ -43,17 +46,19 @@ public class BlackjackScene extends BackgroundScene {
         HBox mainHbox = new HBox();
 
 
-        money.setFont(new Font("Arial", fontSize));
-        subtotal.setFont(new Font("Arial", fontSize));
-        money.setTextFill(Color.web("#000000"));
-        subtotal.setTextFill(Color.web("#000000"));
-
         mainAnchorPain.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
-        AnchorPane.setTopAnchor(money, marginforAnchorPain);
-        AnchorPane.setBottomAnchor(subtotal, marginforAnchorPain);
+        AnchorPane.setTopAnchor(moneyLbl, marginforAnchorPain);
+        AnchorPane.setBottomAnchor(subtotalLbl, marginforAnchorPain);
+        AnchorPane.setBottomAnchor(moneyInsertTxt, 50.0);
+        AnchorPane.setRightAnchor(moneyInsertTxt, marginForMoneyInserts);
+        AnchorPane.setBottomAnchor(moneyInsertLbl,marginForMoneyInserts);
+        AnchorPane.setRightAnchor(moneyInsertLbl, 95.0);
 
         mainHbox.getChildren().addAll(btnHit, btnHold, btnDouble, btnSplit);
-        mainAnchorPain.getChildren().addAll(money, subtotal, mainHbox);
+
+        mainHbox.setSpacing(5);
+
+        mainAnchorPain.getChildren().addAll(moneyLbl, subtotalLbl, moneyInsertTxt,moneyInsertLbl,mainHbox);
 
 
 
@@ -64,4 +69,5 @@ public class BlackjackScene extends BackgroundScene {
         getGroup().getChildren().add(mainAnchorPain);
         super.paint();
     }
+
 }
