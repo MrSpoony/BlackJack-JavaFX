@@ -21,7 +21,8 @@ public class Bot extends Player {
         if (botHand > random.nextInt(MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) + MIN_RANDOM_VALUE) {
             takeCard();
             botHand = getCount(Count.HIGH);
-        } pass();
+        }
+        pass();
     }
 
     @Override

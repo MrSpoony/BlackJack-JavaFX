@@ -42,7 +42,7 @@ public abstract class Player {
         pass();
     }
 
-    protected void takeCard() {
+    public void takeCard() {
         activeCards.add(stack.drawCard());
     }
 
@@ -55,7 +55,7 @@ public abstract class Player {
         }
     }
 
-    protected int getCount(Count highOrLowValue) {
+    public int getCount(Count highOrLowValue) {
         switch (highOrLowValue) {
             case HIGH -> {
                 return getHighCount();

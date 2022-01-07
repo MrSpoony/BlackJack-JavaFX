@@ -67,6 +67,7 @@ public class Card {
     public Face getFace() {
         return face;
     }
+
     public int getValue() {
         return value;
     }

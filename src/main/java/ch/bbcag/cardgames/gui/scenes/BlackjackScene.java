@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class BlackjackScene extends BackgroundScene{
+public class BlackjackScene extends BackgroundScene {
 
     private static final int NUMBER_OF_REAL_PLAYERS = 1;
 
@@ -52,17 +52,14 @@ public class BlackjackScene extends BackgroundScene{
         AnchorPane mainAnchorPain = new AnchorPane();
 
 
-
-
         money.setFont(new Font("Arial", 25));
         subtotal.setFont(new Font("Arial", 25));
         money.setTextFill(Color.web("#000000"));
         subtotal.setTextFill(Color.web("#000000"));
 
 
-
-        mainAnchorPain.setPrefSize(BaseScene.SCREEN_WIDTH,BaseScene.SCREEN_HEIGHT);
-        AnchorPane.setTopAnchor(money,10.0);
+        mainAnchorPain.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
+        AnchorPane.setTopAnchor(money, 10.0);
         AnchorPane.setBottomAnchor(subtotal, 10.0);
 //        AnchorPane.setLeftAnchor(subtotal, 10.0);
 
