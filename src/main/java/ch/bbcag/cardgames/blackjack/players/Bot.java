@@ -8,7 +8,7 @@ import java.util.Random;
 public class Bot extends Player {
 
     private int botHand = 0;
-    private Random random = new Random();
+    private static final Random random = new Random();
     private static final int MAX_RANDOM_VALUE = 21;
     private static final int MIN_RANDOM_VALUE = 10;
 
