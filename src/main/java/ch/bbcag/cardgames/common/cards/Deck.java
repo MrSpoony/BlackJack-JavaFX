@@ -51,7 +51,7 @@ public class Deck extends CopyOnWriteArrayList<Card> implements List<Card> {
         String prefix;
         String suffix;
         for (int i = 0; i < NUMBER_OF_POKER_SUITS; i++) {
-            for (int j = POKER_START_NUMBER; j < NUMBER_OF_POKER_FACES+POKER_START_NUMBER; j++) {
+            for (int j = POKER_START_NUMBER; j < NUMBER_OF_POKER_FACES + POKER_START_NUMBER; j++) {
                 switch (j) {
                     case 2, 3, 4, 5, 6, 7, 8, 9 -> prefix = Integer.toString(j);
                     case 10 -> prefix = "T";
