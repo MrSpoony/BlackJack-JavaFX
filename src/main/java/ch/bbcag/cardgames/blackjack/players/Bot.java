@@ -17,16 +17,17 @@ public class Bot extends Player {
         super(stack);
     }
 
-    public void doSplit() {
-        if (isSplitPossible()) {
-            split();
-        }
-    }
-
     public void turn() {
         if (botHand > random.nextInt(MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) + MIN_RANDOM_VALUE) {
             takeCard();
             botHand = getCount(Count.HIGH);
+        } pass();
+    }
+
+    @Override
+    public void split() {
+        if (isSplitPossible()) {
+            doSplit();
         }
     }
 }
