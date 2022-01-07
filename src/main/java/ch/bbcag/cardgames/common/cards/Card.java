@@ -13,8 +13,8 @@ public class Card {
     private int value;
     private Suit suit;
     private Face face;
-    private Image image;
-    private String imagePath;
+    private final Image image;
+    private final String imagePath;
 
     public Card(String imagePath) {
         this.imagePath = POKER_IMAGE_PATH + imagePath;
@@ -64,12 +64,12 @@ public class Card {
         }
     }
 
-    public int getValue() {
-        return value;
+    public Face getFace() {
+        return face;
     }
 
-    public Suit getSuit() {
-        return suit;
+    public int getValue() {
+        return value;
     }
 
     public Image getImage() {
