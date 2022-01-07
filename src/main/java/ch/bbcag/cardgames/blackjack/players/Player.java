@@ -132,4 +132,8 @@ public abstract class Player {
     public int getBet() {
         return bet;
     }
+
+    public List<Card> getCards() {
+        return activeCards;
+    }
 }
