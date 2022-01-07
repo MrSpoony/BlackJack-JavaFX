@@ -14,15 +14,15 @@ public class Dealer extends Player {
 
     @Override
     public void turn() {
-        if (!hasToTakeCard()) {
-            done = true;
-            return;
+        if (hasToTakeCard()) {
+            takeCard();
+        } else {
+            pass();
         }
-        takeCard();
     }
 
     public boolean hasToTakeCard() {
-        return getCount(Count.HIGH) >= 17;
+        return getCount(Count.HIGH) >= DEALER_MUST_STAY;
     }
 
     @Override
