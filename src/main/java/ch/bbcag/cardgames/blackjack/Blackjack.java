@@ -101,7 +101,7 @@ public class Blackjack {
         }
         players.add(new Dealer(mainStack));
     }
-    public Player getPlayer() {
+    public RealPlayer getPlayer() {
         return getCurrentRealPlayer();
     }
 }
