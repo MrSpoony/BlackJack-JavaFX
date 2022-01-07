@@ -46,11 +46,9 @@ public class Blackjack {
     }
 
     public void startTurns() {
-        if (!players.get(players.size() - 1).isDone())
-            for (Player player : players) {
-                player.turn();
-            }
-
+        if (!players.get(players.size() - 1).isDone()) for (Player player : players) {
+            player.turn();
+        }
     }
 
     private Player findWinner() {
@@ -102,5 +100,8 @@ public class Blackjack {
             players.add(new Bot(mainStack));
         }
         players.add(new Dealer(mainStack));
+    }
+    public Player getPlayer() {
+        return getCurrentRealPlayer();
     }
 }
