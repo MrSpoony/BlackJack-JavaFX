@@ -11,7 +11,7 @@ import java.util.List;
 import static ch.bbcag.cardgames.blackjack.Blackjack.NUMBER_OF_CARDS_TO_GET_AT_BEGIN;
 import static ch.bbcag.cardgames.blackjack.Blackjack.VALUE_TO_WIN;
 
-public abstract class Player implements PlayerActions {
+public abstract class Player {
 
     private final Stack stack;
 
@@ -127,5 +127,9 @@ public abstract class Player implements PlayerActions {
 
     public void setBet(int value) {
         bet = value;
+    }
+
+    public int getBet() {
+        return bet;
     }
 }
