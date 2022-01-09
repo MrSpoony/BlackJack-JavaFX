@@ -12,29 +12,27 @@ import ch.bbcag.cardgames.common.cards.Card;
 import ch.bbcag.cardgames.common.scene.BaseScene;
 import ch.bbcag.cardgames.common.scene.Navigator;
 import ch.bbcag.cardgames.gui.common.*;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class BlackjackScene extends BackgroundScene {
+
 
     private static int NUMBER_OF_PLAYERS = 1;
     private final int NUMBER_OF_DECKS = 6;
     private String cardFace;
 
+
     private Blackjack blackjack;
-    private Stack stack = new Stack(NUMBER_OF_DECKS);
+    private final Stack stack = new Stack(NUMBER_OF_DECKS);
     private Player player;
 
     private List<Card> cards = new ArrayList<>();
-
 
     private final TransparentButton btnSplit = new TransparentButton("Split");
     private final TransparentButton btnDouble = new TransparentButton("Double");
@@ -52,7 +50,6 @@ public class BlackjackScene extends BackgroundScene {
     private final LabelLayout subtotalLbl = new LabelLayout("Subtotal:");
     private final LabelLayout moneyInsertLbl = new LabelLayout("Your Insert:");
 
-    private final String IMAGE_PATH = "/pokerdeck/2B.png";
 
     private final TextField moneyInsertTxt = new TextField("Enter your Money Insert");
 
@@ -63,13 +60,11 @@ public class BlackjackScene extends BackgroundScene {
     private final double textFieldWidth = 150;
     private final double textFieldHeight = 30;
 
-    private double posX = 150;
+    private final double posXDefault = 150;
     private final double posY = 360;
     private final double widtForCards = 125;
     private final double heightForCards = 175;
 
-    //private Card card = new Card(cardFace);
-    private Image card5 = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(IMAGE_PATH)));
 
     public BlackjackScene(Navigator navigator) {
         super(navigator);
@@ -79,12 +74,11 @@ public class BlackjackScene extends BackgroundScene {
     public void update(double deltaInSec) {
         btnDouble.setOnMouseClicked(doubleButtonHandler);
         btnSplit.setOnMouseClicked(splitButtonHandler);
-        btnHit.setOnMouseClicked(hitButtonHandler);
         btnHold.setOnMouseClicked(holdButtonHandler);
+        btnHit.setOnMouseClicked(hitButtonHandler);
 
         player = blackjack.getPlayer();
         cards = player.getCards();
-
 
     }
 
@@ -110,24 +104,23 @@ public class BlackjackScene extends BackgroundScene {
         hBoxForSetbtn.getChildren().add(btnSet);
 
 
-        mainHbox.setSpacing(5);
+        player = blackjack.getPlayer();
+        cards = player.getCards();
 
-        //drawcards(gc, cards);
-//        gc.drawImage(card1.getImage(), 150, 360, 125, 175);
-//        gc.drawImage(card2.getImage(), 250, 360, 125, 175);
-//        gc.drawImage(card3.getImage(), 350, 360, 125, 175);
-//        gc.drawImage(card4.getImage(), 450, 360, 125, 175);
-//
-//        gc.drawImage(card5, 310, 10, 62, 87);
-//        gc.drawImage(card3.getImage(), 410, 10, 62, 87);
-//        gc.drawImage(card4.getImage(), 460, 10, 62, 87);
+       double posX = posXDefault;
+       for(Card card : cards){
+           gc.drawImage(card.getImage() , posX, posY, widtForCards, heightForCards);
+           posX +=50;
+       }
+
+
+        mainHbox.setSpacing(5);
 
         mainAnchorPain.getChildren().addAll(moneyLbl, subtotalLbl, moneyInsertTxt, moneyInsertLbl, mainHbox, hBoxForHelpbtn, hBoxForSetbtn);
 
         PositionOfNodes.setBottomRightLbl(mainHbox, marginforAnchorPain);
         PositionOfNodes.setTopRightLbl(hBoxForHelpbtn, marginforAnchorPain);
         PositionOfNodes.setBottomRightForSpecials(hBoxForSetbtn, marginforAnchorPain, marginForButtons);
-
 
         getGroup().getChildren().add(mainAnchorPain);
     }
@@ -143,21 +136,6 @@ public class BlackjackScene extends BackgroundScene {
 
         super.onEnter();
     }
-
-/*
-    private void drawcards(GraphicsContext gc, List<Card> cards) {
-
-        for (Card card : cards) {
-            if (btnHit.isPressed()) {
-                 gc.drawImage(card.getImage(), posX, posY, widtForCards, heightForCards);
-                 posX += 50;
-                 System.out.println(posX);
-            }
-            else if (!btnHit.isPressed()){
-                break;
-            }
-        }
-    }
-
- */
 }
+
+
