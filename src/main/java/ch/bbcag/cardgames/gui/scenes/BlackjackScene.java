@@ -62,6 +62,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private static final double MARGIN_ANCHOR_PANE = 10.0;
     private static final double MARGIN_MONEY_INSERTS = 75.5;
+    private static final double MARGIN_MONEY_LABEL = 100;
     private static final double MARGIN_BUTTONS = 50.0;
 
     private static final double SPACING_IN_H_BOXES = 5;
@@ -104,17 +105,18 @@ public class BlackjackScene extends BackgroundScene {
         setupVariables();
         setupButtonHandlers();
         setPositionOfNodes();
-
-        H_BOX_SET_BUTTON.getChildren().add(SET_BUTTON);
-
-        INSERT_MONEY_TEXT_FIELD.setPrefSize(MONEY_TEXT_FIELD_WIDTH, MONEY_TEXT_FIELD_HEIGHT);
-
-        setupTopRightHBox();
-        setupBottomRightHBox();
+        setupHBoxes();
         setupAnchorpane();
     }
 
+    private void setupHBoxes() {
+        setupTopRightHBox();
+        H_BOX_SET_BUTTON.getChildren().add(SET_BUTTON);
+        setupBottomRightHBox();
+    }
+
     private void setupAnchorpane() {
+        INSERT_MONEY_TEXT_FIELD.setPrefSize(MONEY_TEXT_FIELD_WIDTH, MONEY_TEXT_FIELD_HEIGHT);
         ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
         ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, SUBTOTAL_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
         getGroup().getChildren().add(ANCHOR_PANE);
@@ -132,7 +134,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private void setPositionOfNodes() {
         PositionOfNodes.setAllFourPositions(MONEY_LABEL, HELP_BUTTON, INSERT_MONEY_LABEL, SUBTOTAL_LABEL, MARGIN_ANCHOR_PANE);
-        PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_LABEL, 100.0, MARGIN_MONEY_INSERTS);
+        PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_LABEL, MARGIN_MONEY_LABEL, MARGIN_MONEY_INSERTS);
         PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_TEXT_FIELD, MARGIN_MONEY_INSERTS, MARGIN_BUTTONS);
         PositionOfNodes.setBottomRightLbl(BOTTOM_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
         PositionOfNodes.setTopRightLbl(TOP_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
