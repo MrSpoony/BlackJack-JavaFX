@@ -88,6 +88,9 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void update(double deltaInSec) {
+        if (!player.isSplitPossible()) {
+            SPLIT_BUTTON.setButtonNotAvailable();
+        }
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
     }
 

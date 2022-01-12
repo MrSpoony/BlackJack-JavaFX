@@ -29,7 +29,7 @@ public abstract class Player {
     }
 
     public boolean isSplitPossible() {
-        return cards.get(0) == cards.get(1) && cards.size() == NUMBER_OF_CARDS_TO_GET_AT_BEGIN;
+        return activeCards.get(0).getFace() == activeCards.get(1).getFace() && activeCards.size() == NUMBER_OF_CARDS_TO_GET_AT_BEGIN;
     }
 
     public abstract void turn();
