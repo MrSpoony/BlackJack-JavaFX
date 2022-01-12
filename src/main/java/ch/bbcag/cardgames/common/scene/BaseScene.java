@@ -9,8 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 
 public abstract class BaseScene extends Scene implements Initialization {
 
-    public static final double SCREEN_WIDTH = 859;
-    public static final double SCREEN_HEIGHT = 540;
+    public static final double SCREEN_WIDTH = 1200;
+    public static final double SCREEN_HEIGHT = 800;
 
 
     protected static Navigator nav;

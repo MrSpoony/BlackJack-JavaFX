@@ -104,4 +104,8 @@ public class Blackjack {
     public RealPlayer getPlayer() {
         return getCurrentRealPlayer();
     }
+
+    public Dealer getDealer() {
+        return (Dealer) players.get(players.size()-1);
+    }
 }

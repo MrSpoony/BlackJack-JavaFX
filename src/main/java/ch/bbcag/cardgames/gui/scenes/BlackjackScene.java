@@ -32,9 +32,10 @@ public class BlackjackScene extends BackgroundScene {
     private Stack stack = new Stack(3);
     private Blackjack blackjack;
     private RealPlayer player;
-    private Dealer dealer = new Dealer(stack);
+    private Dealer dealer;
 
-    private List<Card> cards = new ArrayList<>();
+    private List<Card> playerCards = new ArrayList<>();
+    private List<Card> dealerCards = new ArrayList<>();
 
     private final TransparentButton btnSplit = new TransparentButton("Split");
     private final TransparentButton btnDouble = new TransparentButton("Double");
@@ -68,9 +69,11 @@ public class BlackjackScene extends BackgroundScene {
     private double increment = 50;
     private double dealerPosXIncrement = 20;
     private final double posYPlayerCards = 360;
-    private final double posYDealerCards = 120;
-    private final double widtForCards = 125;
-    private final double heightForCards = 175;
+    private final double posYDealerCards = 20;
+    private final double widthForPlayerCards = 125;
+    private final double heightOfPlayerCards = 175;
+    private final double widthForDealerCards = 62;
+    private final double heightOfDealerCards = 87.5;
 
     private AnchorPane mainAnchorPain = new AnchorPane();
     private HBox mainHbox = new HBox();
@@ -92,27 +95,30 @@ public class BlackjackScene extends BackgroundScene {
         super.paint();
 
         posXPlayerCards = 150;
-        if (cards.size() * increment >= 350) {
+        if (playerCards.size() * increment >= 350) {
             if (increment <= 5 && increment >= 1) {
                 increment -= 1;
             } else if (increment >= 1) {
                 increment -= 5;
             }
         }
-        for (Card card : cards) {
-            gc.drawImage(card.getImage(), posXPlayerCards, posYPlayerCards, widtForCards, heightForCards);
+        for (Card card : playerCards) {
+            gc.drawImage(card.getImage(), posXPlayerCards, posYPlayerCards, widthForPlayerCards, heightOfPlayerCards);
             posXPlayerCards += increment;
         }
-        posXDealerCard = 150;
-        if (cards.size() * dealerPosXIncrement >= 350) {
+
+
+
+        posXDealerCard = 400;
+        if (dealerCards.size() * dealerPosXIncrement >= 350) {
             if (dealerPosXIncrement <= 5 && dealerPosXIncrement >= 1) {
                 dealerPosXIncrement -= 1;
             } else if (dealerPosXIncrement >= 1) {
                 dealerPosXIncrement -= 5;
             }
         }
-        for (Card card : dealer.getCards()){
-            gc.drawImage(card.getImage(), dealerPosXIncrement, posYDealerCards, widtForCards, heightForCards);
+        for (Card card : dealerCards){
+            gc.drawImage(card.getImage(), posXDealerCard, posYDealerCards, widthForDealerCards, heightOfDealerCards);
         }
     }
 
@@ -122,7 +128,10 @@ public class BlackjackScene extends BackgroundScene {
         blackjack = new Blackjack(NUMBER_OF_PLAYERS);
 
         player = blackjack.getPlayer();
-        cards = player.getCards();
+        dealer = blackjack.getDealer();
+
+        playerCards = player.getCards();
+        dealerCards = dealer.getCards();
         mainAnchorPain.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
 
         splitButtonHandler = new SplitButtonHandler(player);
