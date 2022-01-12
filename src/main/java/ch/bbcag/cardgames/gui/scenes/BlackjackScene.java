@@ -88,7 +88,12 @@ public class BlackjackScene extends BackgroundScene {
     @Override
     public void update(double deltaInSec) {
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
+        updateVariables();
+        if (player.isDone()) {
+            blackjack.dealerTurn();
+        }
     }
+
 
     @Override
     public void paint() {
@@ -111,10 +116,10 @@ public class BlackjackScene extends BackgroundScene {
 
         setupTopRightHBox();
         setupBottomRightHBox();
-        setupAnchorpane();
+        setupAnchorPane();
     }
 
-    private void setupAnchorpane() {
+    private void setupAnchorPane() {
         ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
         ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, SUBTOTAL_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
         getGroup().getChildren().add(ANCHOR_PANE);
@@ -194,5 +199,10 @@ public class BlackjackScene extends BackgroundScene {
                 dealerXIncrement -= DEALER_CARDS_INCREMENT_CHANGE;
             }
         }
+    }
+
+    private void updateVariables() {
+        playerCards = player.getCards();
+        dealerCards = dealer.getCards();
     }
 }

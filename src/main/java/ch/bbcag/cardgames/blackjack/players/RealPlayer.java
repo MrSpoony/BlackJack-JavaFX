@@ -28,4 +28,8 @@ public class RealPlayer extends Player {
         this.hit = hit;
     }
 
+    public void setDone(boolean done) {
+        this.done = done;
+
+    }
 }

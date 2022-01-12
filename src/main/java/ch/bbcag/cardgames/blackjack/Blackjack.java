@@ -1,6 +1,5 @@
 package ch.bbcag.cardgames.blackjack;
 
-import ch.bbcag.cardgames.blackjack.players.Bot;
 import ch.bbcag.cardgames.blackjack.players.Dealer;
 import ch.bbcag.cardgames.blackjack.players.Player;
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
@@ -13,10 +12,9 @@ public class Blackjack {
     public static final int VALUE_TO_WIN = 21;
     public static final int NUMBER_OF_CARDS_TO_GET_AT_BEGIN = 2;
     private static final int NUMBER_OF_DECKS_USED = 3;
-    private static final int NUMBER_OF_PLAYERS = 6;
+    private static final int NUMBER_OF_PLAYERS = 1;
 
     private int numberOfRealPlayers;
-    private int numberOfBots;
     private int dealerHand;
     private int playerHand;
     private Player dealer;
@@ -27,16 +25,28 @@ public class Blackjack {
 
     public Blackjack(int numberOrRealPlayers) {
         this.numberOfRealPlayers = numberOrRealPlayers;
-        numberOfBots = NUMBER_OF_PLAYERS - (numberOrRealPlayers + 1);
         setupGame();
-        startTurns();
-        if (!isDraw()) {
-            winner = findWinner(); // Winner is the Player that won.
-        }
-        // else Its a draw ;
     }
 
-    public RealPlayer getCurrentRealPlayer() {
+    public void dealerTurn() {
+        getCurrentRealPlayer().setDone(false);
+        while (!dealer.isDone()) {
+            dealer.turn();
+        }
+        System.out.println("Dealer done");
+        if (!isDraw()) winner = findWinner();
+        else System.out.println("its a draw");
+        getCurrentRealPlayer().isDone();
+        System.out.println(winner);
+        if(getCurrentRealPlayer().isSplitHappend){
+            if (!isDraw()) winner = findWinner();
+            else System.out.println("its a draw");
+            getCurrentRealPlayer().isDone();
+            System.out.println(winner);
+        }
+    }
+
+    private RealPlayer getCurrentRealPlayer() {
         for (Player player : players) {
             if (player instanceof RealPlayer) {
                 return (RealPlayer) player;
@@ -45,37 +55,38 @@ public class Blackjack {
         throw new IllegalStateException("There is no real player");
     }
 
-    public void startTurns() {
-        if (!players.get(players.size() - 1).isDone()) for (Player player : players) {
-            player.turn();
-        }
-    }
 
     private Player findWinner() {
-        if (playerHand < VALUE_TO_WIN + 1) {
-            if (dealerHand < VALUE_TO_WIN + 1) {
+        refreshCounters();
+        Player winner;
+        if (playerHand <= VALUE_TO_WIN) {
+            if (dealerHand <= VALUE_TO_WIN) {
                 if (dealerHand < playerHand) {
-                    return getCurrentRealPlayer();
-                } else if (dealerHand > playerHand) {
-                    return dealer;
+                    winner = getCurrentRealPlayer();
+                } else {
+                    winner = dealer;
                 }
-            } else return getCurrentRealPlayer();
-        } else return dealer;
-        return dealer;
+            } else winner = getCurrentRealPlayer();
+        } else winner = dealer;
+        return winner;
     }
 
     private boolean isAmountTheSame() {
-        return players.get(players.size() - 1).getCount(Count.BEST) == getCurrentRealPlayer().getCount(Count.BEST);
+        return players.get(players.size() - 1).getCount(Count.BEST, dealer.getCards()) == getCurrentRealPlayer().getCount(Count.BEST, getCurrentRealPlayer().getCards());
     }
 
     private boolean isDraw() {
-        return isAmountTheSame() && getCurrentRealPlayer().getCount(Count.BEST) < VALUE_TO_WIN + 1;
+        return isAmountTheSame() && getCurrentRealPlayer().getCount(Count.BEST, getCurrentRealPlayer().getCards()) < VALUE_TO_WIN + 1;
     }
 
     private void setupVariables() {
         dealer = players.get(players.size() - 1);
-        dealerHand = dealer.getCount(Count.BEST);
-        playerHand = getCurrentRealPlayer().getCount(Count.BEST);
+        refreshCounters();
+    }
+
+    private void refreshCounters() {
+        dealerHand = dealer.getCount(Count.BEST, dealer.getCards());
+        playerHand = getCurrentRealPlayer().getCount(Count.BEST, getCurrentRealPlayer().getCards());
     }
 
     private void dealStartCards() {
@@ -93,19 +104,15 @@ public class Blackjack {
     }
 
     private void setupPlayers() {
-        for (int i = 0; i < numberOfRealPlayers; i++) {
-            players.add(new RealPlayer(mainStack));
-        }
-        for (int i = 0; i < numberOfBots; i++) {
-            players.add(new Bot(mainStack));
-        }
+        players.add(new RealPlayer(mainStack));
         players.add(new Dealer(mainStack));
     }
+
     public RealPlayer getPlayer() {
         return getCurrentRealPlayer();
     }
 
     public Dealer getDealer() {
-        return (Dealer) players.get(players.size()-1);
+        return (Dealer) players.get(players.size() - 1);
     }
 }
