@@ -2,7 +2,7 @@ package ch.bbcag.cardgames.gui.scenes;
 
 
 import ch.bbcag.cardgames.blackjack.Blackjack;
-import ch.bbcag.cardgames.blackjack.Count;
+import ch.bbcag.cardgames.blackjack.Stack;
 import ch.bbcag.cardgames.blackjack.buttonhandler.DoubleButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HitButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HoldButtonHandler;
@@ -15,6 +15,7 @@ import ch.bbcag.cardgames.common.scene.Navigator;
 import ch.bbcag.cardgames.gui.common.LabelLayout;
 import ch.bbcag.cardgames.gui.common.PositionOfNodes;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
+import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -28,9 +29,10 @@ public class BlackjackScene extends BackgroundScene {
 
     private static int NUMBER_OF_PLAYERS = 1;
 
+    private Stack stack = new Stack(3);
     private Blackjack blackjack;
     private RealPlayer player;
-    private Dealer dealer;
+    private Dealer dealer = new Dealer(stack);
 
     private List<Card> cards = new ArrayList<>();
 
@@ -40,6 +42,7 @@ public class BlackjackScene extends BackgroundScene {
     private final TransparentButton btnHold = new TransparentButton("Hold");
     private final TransparentButton btnHelp = new TransparentButton("Help");
     private final TransparentButton btnSet = new TransparentButton("Set");
+    private final TransparentButton btnExit = new TransparentButton("Exit");
 
     private SplitButtonHandler splitButtonHandler;
     private DoubleButtonHandler doubleButtonHandler;
@@ -71,7 +74,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private AnchorPane mainAnchorPain = new AnchorPane();
     private HBox mainHbox = new HBox();
-    private HBox hBoxForHelpbtn = new HBox();
+    private HBox hBoxTopRight = new HBox();
     private HBox hBoxForSetbtn = new HBox();
 
     public BlackjackScene(Navigator navigator) {
@@ -80,7 +83,7 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void update(double deltaInSec) {
-
+        btnExit.setOnAction(actionEvent -> Platform.exit());
     }
 
     @Override
@@ -99,6 +102,17 @@ public class BlackjackScene extends BackgroundScene {
         for (Card card : cards) {
             gc.drawImage(card.getImage(), posXPlayerCards, posYPlayerCards, widtForCards, heightForCards);
             posXPlayerCards += increment;
+        }
+        posXDealerCard = 150;
+        if (cards.size() * dealerPosXIncrement >= 350) {
+            if (dealerPosXIncrement <= 5 && dealerPosXIncrement >= 1) {
+                dealerPosXIncrement -= 1;
+            } else if (dealerPosXIncrement >= 1) {
+                dealerPosXIncrement -= 5;
+            }
+        }
+        for (Card card : dealer.getCards()){
+            gc.drawImage(card.getImage(), dealerPosXIncrement, posYDealerCards, widtForCards, heightForCards);
         }
     }
 
@@ -125,16 +139,17 @@ public class BlackjackScene extends BackgroundScene {
         PositionOfNodes.setBottomRightForSpecials(moneyInsertLbl, 100.0, marginForMoneyInserts);
         PositionOfNodes.setBottomRightForSpecials(moneyInsertTxt, marginForMoneyInserts, marginForButtons);
         PositionOfNodes.setBottomRightLbl(mainHbox, marginforAnchorPain);
-        PositionOfNodes.setTopRightLbl(hBoxForHelpbtn, marginforAnchorPain);
+        PositionOfNodes.setTopRightLbl(hBoxTopRight, marginforAnchorPain);
         PositionOfNodes.setBottomRightForSpecials(hBoxForSetbtn, marginforAnchorPain, marginForButtons);
         mainHbox.setSpacing(5);
+        hBoxTopRight.setSpacing(5);
 
         moneyInsertTxt.setPrefSize(textFieldWidth, textFieldHeight);
 
         mainHbox.getChildren().addAll(btnHit, btnHold, btnDouble, btnSplit);
-        hBoxForHelpbtn.getChildren().add(btnHelp);
+        hBoxTopRight.getChildren().addAll(btnHelp, btnExit);
         hBoxForSetbtn.getChildren().add(btnSet);
-        mainAnchorPain.getChildren().addAll(moneyLbl, subtotalLbl, moneyInsertTxt, moneyInsertLbl, mainHbox, hBoxForHelpbtn, hBoxForSetbtn);
+        mainAnchorPain.getChildren().addAll(moneyLbl, subtotalLbl, moneyInsertTxt, moneyInsertLbl, mainHbox, hBoxTopRight, hBoxForSetbtn);
         getGroup().getChildren().add(mainAnchorPain);
     }
 }
