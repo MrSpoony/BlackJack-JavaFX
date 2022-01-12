@@ -4,6 +4,7 @@ import ch.bbcag.cardgames.common.cards.Card;
 import ch.bbcag.cardgames.common.cards.Deck;
 import ch.bbcag.cardgames.common.cards.enums.DeckName;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,6 +18,7 @@ public class Stack extends CopyOnWriteArrayList<Card> implements List<Card> {
     public Stack(int numberOfDecks) {
         this.numberOfDecks = numberOfDecks;
         createStack();
+        shuffle();
     }
 
     private void createStack() {
@@ -41,5 +43,9 @@ public class Stack extends CopyOnWriteArrayList<Card> implements List<Card> {
         if (isEmpty()) {
             throw new NullPointerException("For this operation deck cannot be empty!");
         }
+    }
+
+    private void shuffle() {
+        Collections.shuffle(this);
     }
 }
