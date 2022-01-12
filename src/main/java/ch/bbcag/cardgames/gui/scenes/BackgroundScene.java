@@ -9,7 +9,7 @@ import java.util.Objects;
 public abstract class BackgroundScene extends BaseScene {
 
     private static final String BACKGROUND_IMAGE_PATH = "/backgrounds/mat.png";
-    private final Image image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(BACKGROUND_IMAGE_PATH)));
+    protected final Image image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(BACKGROUND_IMAGE_PATH)));
 
 
     public BackgroundScene(Navigator navigator) {
@@ -17,7 +17,8 @@ public abstract class BackgroundScene extends BaseScene {
     }
 
     @Override
-    public void paint() {
+    public void onEnter() {
+        super.onEnter();
         gc.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
     }
 }
