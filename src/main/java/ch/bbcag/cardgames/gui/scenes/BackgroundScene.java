@@ -17,8 +17,7 @@ public abstract class BackgroundScene extends BaseScene {
     }
 
     @Override
-    public void onEnter() {
-        super.onEnter();
+    public void paint() {
         gc.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
     }
 }

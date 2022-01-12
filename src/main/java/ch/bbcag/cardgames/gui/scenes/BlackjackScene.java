@@ -2,10 +2,12 @@ package ch.bbcag.cardgames.gui.scenes;
 
 
 import ch.bbcag.cardgames.blackjack.Blackjack;
+import ch.bbcag.cardgames.blackjack.Count;
 import ch.bbcag.cardgames.blackjack.buttonhandler.DoubleButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HitButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HoldButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.SplitButtonHandler;
+import ch.bbcag.cardgames.blackjack.players.Dealer;
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
 import ch.bbcag.cardgames.common.cards.Card;
 import ch.bbcag.cardgames.common.scene.BaseScene;
@@ -28,6 +30,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private Blackjack blackjack;
     private RealPlayer player;
+    private Dealer dealer;
 
     private List<Card> cards = new ArrayList<>();
 
@@ -48,7 +51,7 @@ public class BlackjackScene extends BackgroundScene {
     private final LabelLayout moneyInsertLbl = new LabelLayout("Your Insert:");
 
 
-    private final TextField moneyInsertTxt = new TextField("Enter your Money Insert");
+    private final TextField moneyInsertTxt = new TextField("Enter your Money ");
 
     private final double marginforAnchorPain = 10.0;
     private final double marginForMoneyInserts = 75.5;
@@ -57,8 +60,12 @@ public class BlackjackScene extends BackgroundScene {
     private final double textFieldWidth = 150;
     private final double textFieldHeight = 30;
 
-    private final double posXDefault = 150;
-    private final double posY = 360;
+    private double posXPlayerCards;
+    private double posXDealerCard;
+    private double increment = 50;
+    private double dealerPosXIncrement = 20;
+    private final double posYPlayerCards = 360;
+    private final double posYDealerCards = 120;
     private final double widtForCards = 125;
     private final double heightForCards = 175;
 
@@ -78,13 +85,21 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void paint() {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        super.paint();
 
-       double posX = posXDefault;
-       for(Card card : cards){
-           gc.drawImage(card.getImage() , posX, posY, widtForCards, heightForCards);
-           posX +=50;
-       }
-
+        posXPlayerCards = 150;
+        if (cards.size() * increment >= 350) {
+            if (increment <= 5 && increment >= 1) {
+                increment -= 1;
+            } else if (increment >= 1) {
+                increment -= 5;
+            }
+        }
+        for (Card card : cards) {
+            gc.drawImage(card.getImage(), posXPlayerCards, posYPlayerCards, widtForCards, heightForCards);
+            posXPlayerCards += increment;
+        }
     }
 
     @Override
@@ -102,8 +117,8 @@ public class BlackjackScene extends BackgroundScene {
         holdButtonHandler = new HoldButtonHandler(player);
 
         btnDouble.setOnAction(doubleButtonHandler);
-        btnSplit. setOnAction(splitButtonHandler);
-        btnHold.  setOnAction(holdButtonHandler);
+        btnSplit.setOnAction(splitButtonHandler);
+        btnHold.setOnAction(holdButtonHandler);
         btnHit.setOnAction(hitButtonHandler);
 
         PositionOfNodes.setAllFourPositions(moneyLbl, btnHelp, moneyInsertLbl, subtotalLbl, marginforAnchorPain);

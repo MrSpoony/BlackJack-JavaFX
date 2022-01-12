@@ -12,7 +12,7 @@ public class Blackjack {
 
     public static final int VALUE_TO_WIN = 21;
     public static final int NUMBER_OF_CARDS_TO_GET_AT_BEGIN = 2;
-    private static final int NUMBER_OF_DECKS_USED = 10;
+    private static final int NUMBER_OF_DECKS_USED = 3;
     private static final int NUMBER_OF_PLAYERS = 6;
 
     private int numberOfRealPlayers;
