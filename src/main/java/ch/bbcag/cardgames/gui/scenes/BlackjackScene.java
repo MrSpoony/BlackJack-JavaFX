@@ -2,7 +2,6 @@ package ch.bbcag.cardgames.gui.scenes;
 
 
 import ch.bbcag.cardgames.blackjack.Blackjack;
-import ch.bbcag.cardgames.blackjack.Stack;
 import ch.bbcag.cardgames.blackjack.buttonhandler.DoubleButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HitButtonHandler;
 import ch.bbcag.cardgames.blackjack.buttonhandler.HoldButtonHandler;
@@ -26,59 +25,57 @@ import java.util.List;
 
 public class BlackjackScene extends BackgroundScene {
 
-
     private static int NUMBER_OF_PLAYERS = 1;
 
-    private Stack stack = new Stack(3);
-    private Blackjack blackjack;
-    private RealPlayer player;
-    private Dealer dealer;
+    private static final double CARDS_Y_OFFSET = 50;
+
+    private static final double WIDTH_PLAYER_CARDS = 125;
+    private static final double HEIGHT_PLAYER_CARDS = 175;
+    private static final double POSITION_Y_PLAYER_CARDS = canvas.getHeight() - HEIGHT_PLAYER_CARDS - CARDS_Y_OFFSET;
+    private static final double PLAYER_CARDS_INITIAL_X = 150;
+    private static final double PLAYER_CARDS_X_SPACE = canvas.getWidth() - PLAYER_CARDS_INITIAL_X - 350;
+    private static final double PLAYER_CARDS_INCREMENT_CHANGE = 5;
+
+    private static final double WIDTH_DEALER_CARDS = 83;
+    private static final double HEIGHT_DEALER_CARDS = 117;
+    private static final double POSITION_Y_DEALER_CARDS = CARDS_Y_OFFSET;
+    private static final double DEALER_CARDS_INITIAL_X = 300;
+    private static final double DEALER_CARDS_X_SPACE = canvas.getWidth() - (2 *DEALER_CARDS_INITIAL_X);
+    private static final double DEALER_CARDS_INCREMENT_CHANGE = 3;
+
+
+    private static final TransparentButton SPLIT_BUTTON = new TransparentButton("Split");
+    private static final TransparentButton DOUBLE_BUTTON = new TransparentButton("Double");
+    private static final TransparentButton HIT_BUTTON = new TransparentButton("Hit");
+    private static final TransparentButton HOLD_BUTTON = new TransparentButton("Hold");
+    private static final TransparentButton HELP_BUTTON = new TransparentButton("Help");
+    private static final TransparentButton SET_BUTTON = new TransparentButton("Set");
+    private static final TransparentButton EXIT_BUTTON = new TransparentButton("Exit");
+
+    private static final LabelLayout MONEY_LABEL = new LabelLayout("Money:");
+    private static final LabelLayout SUBTOTAL_LABEL = new LabelLayout("Subtotal:");
+    private static final LabelLayout INSERT_MONEY_LABEL = new LabelLayout("Your Insert:");
+    private static final TextField INSERT_MONEY_TEXT_FIELD = new TextField("Enter your Money ");
+
+
+    private static final double MARGIN_ANCHOR_PANE = 10.0;
+    private static final double MARGIN_MONEY_INSERTS = 75.5;
+    private static final double MARGIN_BUTTONS = 50.0;
+
+    private static final AnchorPane ANCHOR_PANE = new AnchorPane();
+    private static final HBox H_BOX = new HBox();
+    private static final HBox TOP_RIGHT_H_BOX = new HBox();
+    private static final HBox H_BOX_SET_BUTTON = new HBox();
+
+    private double playerXIncrement = WIDTH_PLAYER_CARDS - 25;
+    private double dealerXIncrement = WIDTH_DEALER_CARDS - 25;
 
     private List<Card> playerCards = new ArrayList<>();
     private List<Card> dealerCards = new ArrayList<>();
 
-    private final TransparentButton btnSplit = new TransparentButton("Split");
-    private final TransparentButton btnDouble = new TransparentButton("Double");
-    private final TransparentButton btnHit = new TransparentButton("Hit");
-    private final TransparentButton btnHold = new TransparentButton("Hold");
-    private final TransparentButton btnHelp = new TransparentButton("Help");
-    private final TransparentButton btnSet = new TransparentButton("Set");
-    private final TransparentButton btnExit = new TransparentButton("Exit");
-
-    private SplitButtonHandler splitButtonHandler;
-    private DoubleButtonHandler doubleButtonHandler;
-    private HitButtonHandler hitButtonHandler;
-    private HoldButtonHandler holdButtonHandler;
-
-    private final LabelLayout moneyLbl = new LabelLayout("Money:");
-    private final LabelLayout subtotalLbl = new LabelLayout("Subtotal:");
-    private final LabelLayout moneyInsertLbl = new LabelLayout("Your Insert:");
 
 
-    private final TextField moneyInsertTxt = new TextField("Enter your Money ");
 
-    private final double marginforAnchorPain = 10.0;
-    private final double marginForMoneyInserts = 75.5;
-    private final double marginForButtons = 50.0;
-
-    private final double textFieldWidth = 150;
-    private final double textFieldHeight = 30;
-
-    private double posXPlayerCards;
-    private double posXDealerCard;
-    private double increment = 50;
-    private double dealerPosXIncrement = 20;
-    private final double posYPlayerCards = 360;
-    private final double posYDealerCards = 20;
-    private final double widthForPlayerCards = 125;
-    private final double heightOfPlayerCards = 175;
-    private final double widthForDealerCards = 62;
-    private final double heightOfDealerCards = 87.5;
-
-    private AnchorPane mainAnchorPain = new AnchorPane();
-    private HBox mainHbox = new HBox();
-    private HBox hBoxTopRight = new HBox();
-    private HBox hBoxForSetbtn = new HBox();
 
     public BlackjackScene(Navigator navigator) {
         super(navigator);
@@ -86,7 +83,7 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void update(double deltaInSec) {
-        btnExit.setOnAction(actionEvent -> Platform.exit());
+        EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
     }
 
     @Override
@@ -94,73 +91,84 @@ public class BlackjackScene extends BackgroundScene {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         super.paint();
 
-        posXPlayerCards = 150;
-        if (playerCards.size() * increment >= 350) {
-            if (increment <= 5 && increment >= 1) {
-                increment -= 1;
-            } else if (increment >= 1) {
-                increment -= 5;
-            }
-        }
+
+        drawPlayerCards();
+        drawDealerCards();
+    }
+
+    private void drawPlayerCards() {
+        double posXPlayerCards = PLAYER_CARDS_INITIAL_X;
+        calculatePlayerXIncrement();
         for (Card card : playerCards) {
-            gc.drawImage(card.getImage(), posXPlayerCards, posYPlayerCards, widthForPlayerCards, heightOfPlayerCards);
-            posXPlayerCards += increment;
+            gc.drawImage(card.getImage(), posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
+            posXPlayerCards += playerXIncrement;
         }
+    }
 
+    private void drawDealerCards() {
+        double posXDealerCards = DEALER_CARDS_INITIAL_X;
+        calculateDealerXIncrement();
+        for (Card card : dealerCards){
+            gc.drawImage(card.getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+            posXDealerCards += dealerXIncrement;
+        }
+    }
 
-
-        posXDealerCard = 400;
-        if (dealerCards.size() * dealerPosXIncrement >= 350) {
-            if (dealerPosXIncrement <= 5 && dealerPosXIncrement >= 1) {
-                dealerPosXIncrement -= 1;
-            } else if (dealerPosXIncrement >= 1) {
-                dealerPosXIncrement -= 5;
+    private void calculatePlayerXIncrement() {
+        if (playerCards.size() * playerXIncrement >= PLAYER_CARDS_X_SPACE) {
+            if (playerXIncrement > PLAYER_CARDS_INCREMENT_CHANGE) {
+                playerXIncrement -= PLAYER_CARDS_INCREMENT_CHANGE;
             }
         }
-        for (Card card : dealerCards){
-            gc.drawImage(card.getImage(), posXDealerCard, posYDealerCards, widthForDealerCards, heightOfDealerCards);
+    }
+
+    private void calculateDealerXIncrement() {
+        if (dealerCards.size() * dealerXIncrement >= DEALER_CARDS_X_SPACE) {
+            if (dealerXIncrement >= DEALER_CARDS_INCREMENT_CHANGE) {
+                dealerXIncrement -= DEALER_CARDS_INCREMENT_CHANGE;
+            }
         }
     }
 
     @Override
     public void onEnter() {
         super.onEnter();
-        blackjack = new Blackjack(NUMBER_OF_PLAYERS);
+        Blackjack blackjack = new Blackjack(NUMBER_OF_PLAYERS);
 
-        player = blackjack.getPlayer();
-        dealer = blackjack.getDealer();
+        RealPlayer player = blackjack.getPlayer();
+        Dealer dealer = blackjack.getDealer();
 
         playerCards = player.getCards();
         dealerCards = dealer.getCards();
-        mainAnchorPain.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
+        ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
 
-        splitButtonHandler = new SplitButtonHandler(player);
-        doubleButtonHandler = new DoubleButtonHandler(player);
-        hitButtonHandler = new HitButtonHandler(player);
-        holdButtonHandler = new HoldButtonHandler(player);
+        SplitButtonHandler splitButtonHandler = new SplitButtonHandler(player);
+        DoubleButtonHandler doubleButtonHandler = new DoubleButtonHandler(player);
+        HitButtonHandler hitButtonHandler = new HitButtonHandler(player);
+        HoldButtonHandler holdButtonHandler = new HoldButtonHandler(player);
 
-        btnDouble.setOnAction(doubleButtonHandler);
-        btnSplit.setOnAction(splitButtonHandler);
-        btnHold.setOnAction(holdButtonHandler);
-        btnHit.setOnAction(hitButtonHandler);
+        DOUBLE_BUTTON.setOnAction(doubleButtonHandler);
+        SPLIT_BUTTON.setOnAction(splitButtonHandler);
+        HOLD_BUTTON.setOnAction(holdButtonHandler);
+        HIT_BUTTON.setOnAction(hitButtonHandler);
 
-        PositionOfNodes.setAllFourPositions(moneyLbl, btnHelp, moneyInsertLbl, subtotalLbl, marginforAnchorPain);
-        PositionOfNodes.setBottomRightForSpecials(moneyInsertLbl, 100.0, marginForMoneyInserts);
-        PositionOfNodes.setBottomRightForSpecials(moneyInsertTxt, marginForMoneyInserts, marginForButtons);
-        PositionOfNodes.setBottomRightLbl(mainHbox, marginforAnchorPain);
-        PositionOfNodes.setTopRightLbl(hBoxTopRight, marginforAnchorPain);
-        PositionOfNodes.setBottomRightForSpecials(hBoxForSetbtn, marginforAnchorPain, marginForButtons);
-        mainHbox.setSpacing(5);
-        hBoxTopRight.setSpacing(5);
+        PositionOfNodes.setAllFourPositions(MONEY_LABEL, HELP_BUTTON, INSERT_MONEY_LABEL, SUBTOTAL_LABEL, MARGIN_ANCHOR_PANE);
+        PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_LABEL, 100.0, MARGIN_MONEY_INSERTS);
+        PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_TEXT_FIELD, MARGIN_MONEY_INSERTS, MARGIN_BUTTONS);
+        PositionOfNodes.setBottomRightLbl(H_BOX, MARGIN_ANCHOR_PANE);
+        PositionOfNodes.setTopRightLbl(TOP_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
+        PositionOfNodes.setBottomRightForSpecials(H_BOX_SET_BUTTON, MARGIN_ANCHOR_PANE, MARGIN_BUTTONS);
+        H_BOX.setSpacing(5);
+        TOP_RIGHT_H_BOX.setSpacing(5);
 
-        moneyInsertTxt.setPrefSize(textFieldWidth, textFieldHeight);
+        double textFieldWidth = 150;
+        double textFieldHeight = 30;
+        INSERT_MONEY_TEXT_FIELD.setPrefSize(textFieldWidth, textFieldHeight);
 
-        mainHbox.getChildren().addAll(btnHit, btnHold, btnDouble, btnSplit);
-        hBoxTopRight.getChildren().addAll(btnHelp, btnExit);
-        hBoxForSetbtn.getChildren().add(btnSet);
-        mainAnchorPain.getChildren().addAll(moneyLbl, subtotalLbl, moneyInsertTxt, moneyInsertLbl, mainHbox, hBoxTopRight, hBoxForSetbtn);
-        getGroup().getChildren().add(mainAnchorPain);
+        H_BOX.getChildren().addAll(HIT_BUTTON, HOLD_BUTTON, DOUBLE_BUTTON, SPLIT_BUTTON);
+        TOP_RIGHT_H_BOX.getChildren().addAll(HELP_BUTTON, EXIT_BUTTON);
+        H_BOX_SET_BUTTON.getChildren().add(SET_BUTTON);
+        ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, SUBTOTAL_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
+        getGroup().getChildren().add(ANCHOR_PANE);
     }
 }
-
-
