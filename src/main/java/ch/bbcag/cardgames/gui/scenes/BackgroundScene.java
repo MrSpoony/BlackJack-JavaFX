@@ -9,7 +9,7 @@ import java.util.Objects;
 public abstract class BackgroundScene extends BaseScene {
 
     private static final String BACKGROUND_IMAGE_PATH = "/backgrounds/mat.png";
-    protected final Image image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(BACKGROUND_IMAGE_PATH)));
+    private static final Image image = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(BACKGROUND_IMAGE_PATH)));
 
 
     public BackgroundScene(Navigator navigator) {
