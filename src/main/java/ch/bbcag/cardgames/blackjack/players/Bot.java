@@ -20,7 +20,7 @@ public class Bot extends Player {
     public void turn() {
         if (botHand > random.nextInt(MAX_RANDOM_VALUE - MIN_RANDOM_VALUE) + MIN_RANDOM_VALUE) {
             takeCard();
-            botHand = getCount(Count.HIGH);
+            botHand = getCount(Count.HIGH, getCards());
         }
         pass();
     }

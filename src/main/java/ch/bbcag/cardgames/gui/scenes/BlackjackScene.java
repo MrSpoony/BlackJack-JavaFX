@@ -88,8 +88,16 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void update(double deltaInSec) {
+        if (!player.isSplitPossible()) {
+            SPLIT_BUTTON.setButtonNotAvailable();
+        }
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
+        updateVariables();
+        if (player.isDone()) {
+            blackjack.dealerTurn();
+        }
     }
+
 
     @Override
     public void paint() {
@@ -196,5 +204,10 @@ public class BlackjackScene extends BackgroundScene {
                 dealerXIncrement -= DEALER_CARDS_INCREMENT_CHANGE;
             }
         }
+    }
+
+    private void updateVariables() {
+        playerCards = player.getCards();
+        dealerCards = dealer.getCards();
     }
 }
