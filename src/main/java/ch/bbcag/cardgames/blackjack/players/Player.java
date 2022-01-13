@@ -14,14 +14,14 @@ import static ch.bbcag.cardgames.blackjack.Blackjack.VALUE_TO_WIN;
 public abstract class Player {
 
     private final Stack stack;
-    public boolean isSplitHappend;
+    protected boolean isSplitHappend;
 
     private List<Card> beforeSplitCards = new CopyOnWriteArrayList<>();
     private  List<Card> splitCards = new CopyOnWriteArrayList<>();
 
     private List<Card> activeCards = new CopyOnWriteArrayList<>();
 
-    private int bet;
+    protected int bet;
     private boolean splitHappend = false;
     protected boolean done = false;
     protected boolean isSplit = false;

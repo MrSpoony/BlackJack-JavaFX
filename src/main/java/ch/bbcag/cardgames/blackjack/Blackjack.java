@@ -86,6 +86,7 @@ public class Blackjack {
     }
 
     public void newGame() {
+        System.out.println("oaienstaorisentariosentaroisent");
         setupNewGame();
     }
 
@@ -147,6 +148,7 @@ public class Blackjack {
     }
 
     private void setupNewGame() {
+        System.out.println("Yoienaoriesntaorien");
         setupNewPlayers();
         setupVariables();
         dealStartCards();

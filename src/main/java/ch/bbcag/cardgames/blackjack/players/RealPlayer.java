@@ -39,7 +39,6 @@ public class RealPlayer extends Player {
 
     public void setDone(boolean done) {
         this.done = done;
-
     }
 
     public int getMoney() {
@@ -51,6 +50,8 @@ public class RealPlayer extends Player {
     }
 
     public void clear() {
+        done = false;
+        bet = 0;
         getCards().clear();
         getSplitCards().clear();
         getBeforeSplitCards().clear();

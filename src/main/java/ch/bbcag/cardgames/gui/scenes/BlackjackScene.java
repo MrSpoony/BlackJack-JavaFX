@@ -100,13 +100,12 @@ public class BlackjackScene extends BackgroundScene {
     @Override
     public void update(double deltaInSec) {
         setButtonAvailable();
-        EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
         updateVariables();
         updateMoneyLabel();
         if (player.isDone()) {
             winner = blackjack.dealerTurn();
-            WINNER_IS_LABEL.setText(winner);
             showPlayAgainButton();
+            WINNER_IS_LABEL.setText(winner);
         }
     }
 
@@ -181,7 +180,7 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setGUI() {
-        getGroup().getChildren().addAll(WIN_SCREEN_V_BOX, ANCHOR_PANE);
+        getStackPane().getChildren().addAll(WIN_SCREEN_V_BOX, ANCHOR_PANE);
     }
 
     private void setupBottomRightHBox() {
@@ -226,6 +225,11 @@ public class BlackjackScene extends BackgroundScene {
 
         BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD);
         SET_BUTTON.setOnAction(betButtonHandler);
+
+        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack);
+        PLAY_AGAIN_BUTTON.setOnAction(replayButtonHandler);
+
+        EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
     }
 
     private void clearCanvas() {
