@@ -88,16 +88,13 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void update(double deltaInSec) {
-        if (!player.isSplitPossible()) {
-            SPLIT_BUTTON.setButtonNotAvailable();
-        }
+        setButtonAvailableness();
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
         updateVariables();
         if (player.isDone()) {
             blackjack.dealerTurn();
         }
     }
-
 
     @Override
     public void paint() {
@@ -115,6 +112,11 @@ public class BlackjackScene extends BackgroundScene {
         setPositionOfNodes();
         setupHBoxes();
         setupAnchorpane();
+    }
+
+    private void setButtonAvailableness() {
+        if (!player.isSplitPossible()) SPLIT_BUTTON.setButtonNotAvailable();
+        if (!player.canTakeACard()) HIT_BUTTON.setButtonNotAvailable();
     }
 
     private void setupHBoxes() {
