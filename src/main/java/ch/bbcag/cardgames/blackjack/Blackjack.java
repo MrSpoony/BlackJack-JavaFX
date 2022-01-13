@@ -36,14 +36,12 @@ public class Blackjack {
         System.out.println("Dealer done");
         if (!isDraw()) winner = findWinner();
         else System.out.println("its a draw");
-        getCurrentRealPlayer().isDone();
-        // getCurrentRealPlayer().setDone(false);
+        getCurrentRealPlayer().setDone(false);
         System.out.println(winner);
         if(getCurrentRealPlayer().isSplitHappend){
             if (!isDraw()) winner = findWinner();
             else System.out.println("its a draw");
-            getCurrentRealPlayer().isDone();
-            // getCurrentRealPlayer().setDone(false);
+            getCurrentRealPlayer().setDone(false);
             System.out.println(winner);
             getCurrentRealPlayer().setSplitHappend(false);
         }

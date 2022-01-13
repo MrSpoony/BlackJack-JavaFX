@@ -74,8 +74,6 @@ public abstract class Player {
         }
     }
 
-
-
     protected void doSplit() {
         isSplit = true;
         splitCards.add(activeCards.get(1));
