@@ -5,6 +5,7 @@ import ch.bbcag.cardgames.blackjack.Stack;
 
 public class Dealer extends Player {
     private static final int DEALER_MUST_STAY = 17;
+    private boolean dealersTurn = false;
 
     public Dealer(Stack stack) {
         super(stack);
@@ -12,6 +13,7 @@ public class Dealer extends Player {
 
     @Override
     public void turn() {
+        dealersTurn = true;
         if (hasToTakeCard()) {
             takeCard();
         } else {
@@ -25,5 +27,9 @@ public class Dealer extends Player {
 
     @Override
     public void split() {
+    }
+
+    public boolean isDealersTurn() {
+        return dealersTurn;
     }
 }

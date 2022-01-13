@@ -13,16 +13,18 @@ import ch.bbcag.cardgames.gui.common.PositionOfNodes;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class BlackjackScene extends BackgroundScene {
 
-    private static int NUMBER_OF_PLAYERS = 1;
+    private static final int NUMBER_OF_PLAYERS = 1;
 
     private static final double CARDS_Y_OFFSET = 50;
 
@@ -40,6 +42,8 @@ public class BlackjackScene extends BackgroundScene {
     private static final double DEALER_CARDS_X_SPACE = canvas.getWidth() - (2 * DEALER_CARDS_INITIAL_X);
     private static final double DEALER_CARDS_INCREMENT_CHANGE = 3;
 
+    private static final String PATH_TO_BACK_CARD = "/pokerdeck/1B.png";
+    private static final Image BACK_CARD_IMAGE = new Image(Objects.requireNonNull(BlackjackScene.class.getResourceAsStream(PATH_TO_BACK_CARD)));
 
     private static final TransparentButton SPLIT_BUTTON = new TransparentButton("Split");
     private static final TransparentButton DOUBLE_BUTTON = new TransparentButton("Double");
@@ -71,7 +75,6 @@ public class BlackjackScene extends BackgroundScene {
 
     private double playerXIncrement = WIDTH_PLAYER_CARDS - 25;
     private double dealerXIncrement = WIDTH_DEALER_CARDS - 25;
-
 
     private List<Card> playerCards = new ArrayList<>();
     private List<Card> dealerCards = new ArrayList<>();
@@ -122,7 +125,7 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void updateMoneyLabel() {
-        MONEY_LABEL.setText(Integer.toString(player.getMoney()));
+        MONEY_LABEL.setText("Your Money: " + player.getMoney());
     }
 
     private void setButtonAvailableness() {
@@ -204,9 +207,15 @@ public class BlackjackScene extends BackgroundScene {
     private void drawDealerCards() {
         double posXDealerCards = DEALER_CARDS_INITIAL_X;
         calculateDealerXIncrement();
-        for (Card card : dealerCards) {
-            gc.drawImage(card.getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+        if (!dealer.isDealersTurn()) {
+            gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
             posXDealerCards += dealerXIncrement;
+            gc.drawImage(dealer.getCards().get(1).getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+        } else {
+            for (Card card : dealerCards) {
+                gc.drawImage(card.getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+                posXDealerCards += dealerXIncrement;
+            }
         }
     }
 
