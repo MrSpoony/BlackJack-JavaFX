@@ -39,6 +39,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private static final double PLAY_AGAIN_BUTTON_TEXT_SIZE = 50;
     private static final double WINNER_IS_TEXT_SIZE = 100;
+    private static final double WINNER_IS_TEXT_SIZE_ON_SPLIT = 70;
     private static final double PLAY_AGAIN_BUTTON_MAX_HEIGHT = 20;
     private static final String PLAY_AGAIN_BUTTON_RGBA = "0.5, 0.5, 0.5, 0.2";
     private static final String PLAY_AGAIN_BUTTON_TEXT_RGB = "#ffffff";
@@ -198,6 +199,11 @@ public class BlackjackScene extends BackgroundScene {
 
     private void showPlayAgain() {
         showPlayAgainButton();
+        if (winner.contains("\n")) {
+            WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE_ON_SPLIT + "; -fx-font-family: Arial");
+        } else {
+            WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
+        }
         WINNER_IS_LABEL.setText(winner);
     }
 

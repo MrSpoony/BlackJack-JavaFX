@@ -15,7 +15,6 @@ public abstract class Player {
 
     private static final int RESHUFFLE_STACK_ON = 60;
     private final Stack stack;
-    protected boolean isSplitHappend;
 
     private List<Card> beforeSplitCards = new CopyOnWriteArrayList<>();
     private List<Card> splitCards = new CopyOnWriteArrayList<>();
@@ -23,7 +22,7 @@ public abstract class Player {
     private List<Card> activeCards = new CopyOnWriteArrayList<>();
 
     protected int bet;
-    private boolean splitHappend = false;
+    private boolean splitHappened = false;
     protected boolean done = false;
     protected boolean isSplit = false;
 
@@ -86,6 +85,7 @@ public abstract class Player {
     }
 
     public void clear() {
+        splitHappened = false;
         done = false;
         bet = 0;
         beforeSplitCards = new CopyOnWriteArrayList<>();
@@ -104,7 +104,7 @@ public abstract class Player {
 
         activeCards.clear();
         activeCards = beforeSplitCards;
-        splitHappend = true;
+        splitHappened = true;
     }
 
     private int getHighCount(List<Card> cards) {
@@ -170,12 +170,12 @@ public abstract class Player {
         return splitCards;
     }
 
-    public void setSplitHappend(boolean splitHappend) {
-        isSplitHappend = splitHappend;
+    public void setSplitHappened(boolean splitHappened) {
+        this.splitHappened = splitHappened;
     }
 
-    public boolean isSplitHappend() {
-        return splitHappend;
+    public boolean isSplitHappened() {
+        return splitHappened;
     }
 
     private boolean isAtFirstTurn() {

@@ -12,7 +12,7 @@ public class Blackjack {
 
     public static final int VALUE_TO_WIN = 21;
     public static final int NUMBER_OF_CARDS_TO_GET_AT_BEGIN = 2;
-    private static final int NUMBER_OF_DECKS_USED = 3;
+    private static final int NUMBER_OF_DECKS_USED = 6;
     private static final int INITIAL_PLAYER_MONEY = 1000;
     private final Stack MAIN_STACK = new Stack(NUMBER_OF_DECKS_USED);
 
@@ -29,17 +29,18 @@ public class Blackjack {
     }
 
     public String dealersTurn() {
-        String winnerString;
+        String winnerString = "";
 
         realPlayer.setDone(false);
         while (!dealer.isDone()) {
             dealer.turn();
         }
         winnerString = drawOrWin(false);
-        if (realPlayer.isSplitHappend()) {
+        if (realPlayer.isSplitHappened()) {
+            System.out.println("in there");
             playerHand = realPlayer.getCount(Count.BEST, realPlayer.getSplitCards());
-            winnerString = winnerString + " and for split " + drawOrWin(true).toLowerCase(Locale.ROOT);
-            realPlayer.setSplitHappend(false);
+            winnerString = winnerString + "\nand for split\n" + drawOrWin(true).toLowerCase(Locale.ROOT);
+            realPlayer.setSplitHappened(false);
         }
         return winnerString;
     }
