@@ -20,7 +20,7 @@ public class BetButtonHandler extends MainButtonHandler{
         } catch (NumberFormatException nfe) {
             return;
         }
-        if (bet != 0) {
+        if (bet != 0 && bet <= player.getMoney()) {
             player.setBet(bet);
             player.setMoney(player.getMoney() - player.getBet());
         }
