@@ -49,4 +49,10 @@ public class RealPlayer extends Player {
     public void setMoney(int money) {
         this.money = money;
     }
+
+    public void clear() {
+        getCards().clear();
+        getSplitCards().clear();
+        getBeforeSplitCards().clear();
+    }
 }
