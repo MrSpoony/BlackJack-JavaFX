@@ -39,6 +39,11 @@ public class Stack extends CopyOnWriteArrayList<Card> implements List<Card> {
         return card;
     }
 
+    public void renewStack() {
+        this.addAll(drawnCards);
+        this.shuffle();
+    }
+
     private void throwErrorIfEmpty() {
         if (isEmpty()) {
             throw new NullPointerException("For this operation deck cannot be empty!");

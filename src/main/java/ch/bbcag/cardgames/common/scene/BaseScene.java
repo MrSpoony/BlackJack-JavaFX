@@ -2,10 +2,10 @@ package ch.bbcag.cardgames.common.scene;
 
 import ch.bbcag.cardgames.common.eventhandler.KeyEventHandler;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 
 public abstract class BaseScene extends Scene implements Initialization {
 
@@ -22,13 +22,13 @@ public abstract class BaseScene extends Scene implements Initialization {
     private long lastTimeInNanoSec;
 
     public BaseScene(Navigator navigator) {
-        super(new Group());
+        super(new StackPane());
         nav = navigator;
     }
 
     private void setupScene() {
         gc = canvas.getGraphicsContext2D();
-        getGroup().getChildren().add(canvas);
+        getStackPane().getChildren().add(canvas);
         setOnKeyPressed(keyEventHandler);
         setOnKeyReleased(keyEventHandler);
 
@@ -54,8 +54,8 @@ public abstract class BaseScene extends Scene implements Initialization {
 
     public abstract void paint();
 
-    protected Group getGroup() {
-        return (Group) getRoot();
+    protected StackPane getStackPane() {
+        return (StackPane) getRoot();
     }
 
     public void onEnter() {
@@ -65,5 +65,6 @@ public abstract class BaseScene extends Scene implements Initialization {
 
     public void onExit() {
         exiting = true;
+        getStackPane().getChildren().removeAll();
     }
 }

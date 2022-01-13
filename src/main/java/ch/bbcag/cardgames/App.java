@@ -5,11 +5,9 @@ import ch.bbcag.cardgames.common.scene.SceneType;
 import ch.bbcag.cardgames.gui.scenes.BlackjackScene;
 import ch.bbcag.cardgames.gui.scenes.StartScene;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
 
     public static void main(String[] args) {
         launch(args);
@@ -22,7 +20,7 @@ public class App extends Application {
         nav.registerScene(SceneType.BLACKJACK, new BlackjackScene(nav));
         nav.registerScene(SceneType.TITLE, new StartScene(nav, this));
 
-        nav.navigateTo(SceneType.TITLE);
+        nav.navigateTo(SceneType.BLACKJACK);
 
         stage.show();
     }

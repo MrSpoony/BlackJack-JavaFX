@@ -13,25 +13,32 @@ import static ch.bbcag.cardgames.blackjack.Blackjack.VALUE_TO_WIN;
 
 public abstract class Player {
 
+    private static final int RESHUFFLE_STACK_ON = 60;
     private final Stack stack;
-    public boolean isSplitHappend;
+    protected boolean isSplitHappend;
 
     private List<Card> beforeSplitCards = new CopyOnWriteArrayList<>();
-    private  List<Card> splitCards = new CopyOnWriteArrayList<>();
+    private List<Card> splitCards = new CopyOnWriteArrayList<>();
 
     private List<Card> activeCards = new CopyOnWriteArrayList<>();
 
-    private int bet;
+    protected int bet;
     private boolean splitHappend = false;
     protected boolean done = false;
     protected boolean isSplit = false;
+
+    protected int money;
 
     public Player(Stack stack) {
         this.stack = stack;
     }
 
     public boolean isSplitPossible() {
-        return activeCards.get(0).getFace() == activeCards.get(1).getFace() && activeCards.size() == NUMBER_OF_CARDS_TO_GET_AT_BEGIN;
+        return activeCards.get(0).getFace() == activeCards.get(1).getFace() && isAtFirstTurn() && !isSplit;
+    }
+
+    public boolean isDoubleDownPossible() {
+        return isAtFirstTurn();
     }
 
     public abstract void turn();
@@ -40,11 +47,15 @@ public abstract class Player {
 
     public void doDoubleDown() {
         bet *= 2;
+        money -= bet;
         takeCard();
         pass();
     }
 
     public void takeCard() {
+        if (stack.size() <= RESHUFFLE_STACK_ON) {
+            stack.renewStack();
+        }
         activeCards.add(stack.drawCard());
     }
 
@@ -74,7 +85,13 @@ public abstract class Player {
         }
     }
 
-
+    public void clear() {
+        done = false;
+        bet = 0;
+        beforeSplitCards = new CopyOnWriteArrayList<>();
+        splitCards = new CopyOnWriteArrayList<>();
+        activeCards = new CopyOnWriteArrayList<>();
+    }
 
     protected void doSplit() {
         isSplit = true;
@@ -129,6 +146,10 @@ public abstract class Player {
         return count;
     }
 
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
     public boolean isDone() {
         return done;
     }
@@ -145,15 +166,20 @@ public abstract class Player {
         return activeCards;
     }
 
-    public List<Card> getBeforeSplitCards() {
-        return beforeSplitCards;
-    }
-
     public List<Card> getSplitCards() {
         return splitCards;
+    }
+
+    public void setSplitHappend(boolean splitHappend) {
+        isSplitHappend = splitHappend;
     }
 
     public boolean isSplitHappend() {
         return splitHappend;
     }
+
+    private boolean isAtFirstTurn() {
+        return (activeCards.size() == NUMBER_OF_CARDS_TO_GET_AT_BEGIN && beforeSplitCards.isEmpty() && splitCards.isEmpty());
+    }
+
 }
