@@ -3,11 +3,10 @@ package ch.bbcag.cardgames.blackjack;
 import ch.bbcag.cardgames.blackjack.players.Dealer;
 import ch.bbcag.cardgames.blackjack.players.Player;
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
-import ch.bbcag.cardgames.common.cards.Card;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Locale;
 
 public class Blackjack {
 
@@ -15,70 +14,50 @@ public class Blackjack {
     public static final int NUMBER_OF_CARDS_TO_GET_AT_BEGIN = 2;
     private static final int NUMBER_OF_DECKS_USED = 3;
     private static final int INITIAL_PLAYER_MONEY = 1000;
+    private final Stack MAIN_STACK = new Stack(NUMBER_OF_DECKS_USED);
 
-    private int numberOfRealPlayers;
     private int dealerHand;
     private int playerHand;
     private Player dealer;
+    private RealPlayer realPlayer;
     private Player winner;
-    private Stack mainStack = new Stack(NUMBER_OF_DECKS_USED);
 
     private List<Player> players = new ArrayList<>();
 
-    public Blackjack(int numberOrRealPlayers) {
-        this.numberOfRealPlayers = numberOrRealPlayers;
+    public Blackjack() {
         setupGame();
     }
 
-    public String dealerTurn() {
-        List<String> winnerString = new CopyOnWriteArrayList<>();
-        List<Card>tmpPlayerHand;
-        String result;
+    public String dealersTurn() {
+        String winnerString;
 
-        getCurrentRealPlayer().setDone(false);
+        realPlayer.setDone(false);
         while (!dealer.isDone()) {
             dealer.turn();
         }
-        System.out.println("Dealer done");
-       winnerString.add(drawOrWin());
-        if(getCurrentRealPlayer().isSplitHappend()){
-            splitVariables();
-            winnerString.add(drawOrWin());
-            getCurrentRealPlayer().setSplitHappend(false);
+        winnerString = drawOrWin(false);
+        if (realPlayer.isSplitHappend()) {
+            playerHand = realPlayer.getCount(Count.BEST, realPlayer.getSplitCards());
+            winnerString = winnerString + " and for split " + drawOrWin(true).toLowerCase(Locale.ROOT);
+            realPlayer.setSplitHappend(false);
         }
-        result = listToString(winnerString);
-        return result;
+        return winnerString;
     }
 
-    private void splitVariables() {
-        int counter = 0;
-        List<Card> tmpPlayerHand;
-        tmpPlayerHand = getCurrentRealPlayer().getSplitCards();
-        for(Card card : tmpPlayerHand){
-            counter += card.getValue();
-        }
-        playerHand = counter;
+    private String drawOrWin(boolean ofSplit) {
+        if (!isDraw()) winner = findWinner(ofSplit);
+        else return "It's a draw";
+        if (winner == realPlayer) return "Player wins";
+        else return "Dealer wins";
     }
 
-    private String drawOrWin() {
-        String tmpWinner = "";
-        if (!isDraw()) winner = findWinner();
-        else return "its a draw";
-        getCurrentRealPlayer().setDone(false);
-        System.out.println(winner);
-        if(winner == getCurrentRealPlayer()) tmpWinner = "Player wins";
-        else tmpWinner = "Dealer wins";
-        return tmpWinner;
-    }
-
-    private String listToString(List<String> winners){
+    private String listToString(List<String> winners) {
         String result = "";
         boolean split = false;
-        for(String winner : winners){
-            if(split){
-                result += " 2. Game: " + winner;
-            }
-            else result = winner;
+        for (String winner : winners) {
+            if (split) {
+                result = result + " 2. Game: " + winner;
+            } else result = winner;
             split = true;
 
         }
@@ -89,47 +68,54 @@ public class Blackjack {
         setupNewGame();
     }
 
-    private RealPlayer getCurrentRealPlayer() {
-        for (Player player : players) {
-            if (player instanceof RealPlayer) {
-                return (RealPlayer) player;
-            }
+    private Player findWinner(boolean ofSplit) {
+        if (!ofSplit) {
+            refreshCounters();
         }
-        throw new IllegalStateException("There is no real player");
-    }
-
-
-    private Player findWinner() {
-        refreshCounters();
-        Player winner;
         if (playerHand <= VALUE_TO_WIN) {
             if (dealerHand <= VALUE_TO_WIN) {
                 if (dealerHand < playerHand) {
-                    winner = getCurrentRealPlayer();
+                    setRealPlayerAsWinner();
                 } else {
-                    winner = dealer;
+                    setRealPlayerAsLooser();
                 }
-            } else winner = getCurrentRealPlayer();
-        } else winner = dealer;
+            } else {
+                setRealPlayerAsWinner();
+            }
+        } else {
+            setRealPlayerAsLooser();
+        }
         return winner;
     }
 
+    private void setRealPlayerAsWinner() {
+        winner = realPlayer;
+        realPlayer.setMoney(realPlayer.getMoney() + realPlayer.getBet() * 2);
+        realPlayer.setBet(0);
+    }
+
+    private void setRealPlayerAsLooser() {
+        winner = dealer;
+        realPlayer.setBet(0);
+    }
+
     private boolean isAmountTheSame() {
-        return players.get(players.size() - 1).getCount(Count.BEST, dealer.getCards()) == getCurrentRealPlayer().getCount(Count.BEST, getCurrentRealPlayer().getCards());
+        return players.get(players.size() - 1).getCount(Count.BEST, dealer.getCards()) == realPlayer.getCount(Count.BEST, realPlayer.getCards());
     }
 
     private boolean isDraw() {
-        return isAmountTheSame() && getCurrentRealPlayer().getCount(Count.BEST, getCurrentRealPlayer().getCards()) < VALUE_TO_WIN + 1;
+        return isAmountTheSame() && realPlayer.getCount(Count.BEST, realPlayer.getCards()) < VALUE_TO_WIN + 1;
     }
 
     private void setupVariables() {
         dealer = players.get(players.size() - 1);
+        realPlayer = (RealPlayer) players.get(0);
         refreshCounters();
     }
 
     private void refreshCounters() {
         dealerHand = dealer.getCount(Count.BEST, dealer.getCards());
-        playerHand = getCurrentRealPlayer().getCount(Count.BEST, getCurrentRealPlayer().getCards());
+        playerHand = realPlayer.getCount(Count.BEST, realPlayer.getCards());
     }
 
     private void dealStartCards() {
@@ -153,18 +139,18 @@ public class Blackjack {
     }
 
     private void setupNewPlayers() {
-        dealer = new Dealer(mainStack);
-        getCurrentRealPlayer().clear();
-        players.add(new Dealer(mainStack));
+        dealer = new Dealer(MAIN_STACK);
+        realPlayer.clear();
+        players.add(new Dealer(MAIN_STACK));
     }
 
     private void setupPlayers() {
-        players.add(new RealPlayer(mainStack, INITIAL_PLAYER_MONEY));
-        players.add(new Dealer(mainStack));
+        players.add(new RealPlayer(MAIN_STACK, INITIAL_PLAYER_MONEY));
+        players.add(new Dealer(MAIN_STACK));
     }
 
     public RealPlayer getPlayer() {
-        return getCurrentRealPlayer();
+        return realPlayer;
     }
 
     public Dealer getDealer() {
