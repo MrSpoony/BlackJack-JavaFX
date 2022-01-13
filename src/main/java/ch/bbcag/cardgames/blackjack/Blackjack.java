@@ -46,7 +46,10 @@ public class Blackjack {
 
     private String drawOrWin(boolean ofSplit) {
         if (!isDraw()) winner = findWinner(ofSplit);
-        else return "It's a draw";
+        else {
+            realPlayer.setMoney(realPlayer.getMoney() + realPlayer.getBet());
+            return "It's a draw";
+        }
         if (winner == realPlayer) return "Player wins";
         else return "Dealer wins";
     }
