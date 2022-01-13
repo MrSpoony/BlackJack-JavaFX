@@ -27,10 +27,9 @@ public class PositionOfNodes {
         AnchorPane.setRightAnchor(node, margin);
     }
 
-    public static void setAllFourPositions(Node ndTop, Node ndRight, Node ndbottom, Node ndLeft, double margin) {
-        setTopLeftLbl(ndTop, margin);
-        setTopRightLbl(ndRight, margin);
-        setBottomRightLbl(ndbottom, margin);
-        setBottomLeftLbl(ndLeft, margin);
+    public static void setAllFourPositions(Node TopLeft, Node TopRight, Node BotRight, double margin) {
+        setTopLeftLbl(TopLeft, margin);
+        setTopRightLbl(TopRight, margin);
+        setBottomRightLbl(BotRight, margin);
     }
 }

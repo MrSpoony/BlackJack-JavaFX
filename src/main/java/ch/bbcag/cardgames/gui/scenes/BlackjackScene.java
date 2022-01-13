@@ -41,7 +41,6 @@ public class BlackjackScene extends BackgroundScene {
     private static final double PLAY_AGAIN_BUTTON_TEXT_SIZE = 50;
     private static final double WINNER_IS_TEXT_SIZE = 100;
     private static final double PLAY_AGAIN_BUTTON_MAX_HEIGHT = 20;
-    private static final double PLAY_AGAIN_BUTTON_MAX_WIDTH = 350;
     private static final String PLAY_AGAIN_BUTTON_RGBA = "0.5, 0.5, 0.5, 0.2";
     private static final String PLAY_AGAIN_BUTTON_TEXT_RGB = "#ffffff";
     private static final String WINNER_IS_LABEL_RGBA = "1, 1, 1, 0.7";
@@ -66,7 +65,6 @@ public class BlackjackScene extends BackgroundScene {
     private static final TransparentButton PLAY_AGAIN_BUTTON = new TransparentButton("Play again?");
 
     private static final LabelLayout MONEY_LABEL = new LabelLayout("Money:");
-    private static final LabelLayout SUBTOTAL_LABEL = new LabelLayout("Subtotal:");
     private static final LabelLayout INSERT_MONEY_LABEL = new LabelLayout("Your Insert:");
     private static final LabelLayout WINNER_IS_LABEL = new LabelLayout("");
     private static final TextField INSERT_MONEY_TEXT_FIELD = new TextField("Enter your Money ");
@@ -79,7 +77,7 @@ public class BlackjackScene extends BackgroundScene {
     private static final double MARGIN_MONEY_LABEL = 100;
     private static final double MARGIN_BUTTONS = 50.0;
 
-    private static final double SPACING_IN_H_BOXES = 5;
+    private static final double SPACING_IN_H_BOXES = 10;
     private static final double SPACING_IN_V_BOX = 20;
 
     private static final AnchorPane ANCHOR_PANE = new AnchorPane();
@@ -112,8 +110,7 @@ public class BlackjackScene extends BackgroundScene {
         updateMoneyLabel();
         if (player.isDone()) {
             winner = blackjack.dealerTurn();
-            showPlayAgainButton();
-            WINNER_IS_LABEL.setText(winner);
+            showPlayAgain();
         }
     }
 
@@ -128,6 +125,13 @@ public class BlackjackScene extends BackgroundScene {
     public void onEnter() {
         super.onEnter();
         setupScene();
+    }
+
+    public void newGame() {
+        blackjack.newGame();
+        setupVariablesForNewGame();
+        hidePlayAgain();
+        makeButtonsAvailable();
     }
 
     private void drawCards() {
@@ -155,6 +159,22 @@ public class BlackjackScene extends BackgroundScene {
         if (!player.isDoubleDownPossible()) DOUBLE_BUTTON.setButtonNotAvailable();
     }
 
+    private void makeButtonsAvailable() {
+        SPLIT_BUTTON.setButtonAvailable();
+        HIT_BUTTON.setButtonAvailable();
+        DOUBLE_BUTTON.setButtonAvailable();
+    }
+
+    private void showPlayAgain() {
+        showPlayAgainButton();
+        WINNER_IS_LABEL.setText(winner);
+    }
+
+    private void hidePlayAgain() {
+        hidePlayAgainButton();
+        WINNER_IS_LABEL.setText("");
+    }
+
     private void hidePlayAgainButton() {
         PLAY_AGAIN_BUTTON.setDisable(true);
         PLAY_AGAIN_BUTTON.setVisible(false);
@@ -174,15 +194,15 @@ public class BlackjackScene extends BackgroundScene {
     private void setupAnchorPane() {
         INSERT_MONEY_TEXT_FIELD.setPrefSize(MONEY_TEXT_FIELD_WIDTH, MONEY_TEXT_FIELD_HEIGHT);
         ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
-        ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, SUBTOTAL_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
+        ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
     }
 
     private void setupEndScreen() {
         hidePlayAgainButton();
         PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA+ "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
-                " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + "; -fx-max-width: " + PLAY_AGAIN_BUTTON_MAX_WIDTH + ";");
+                " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + ";");
         WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
-        WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + "WINNER_IS_LABEL_RGBA" + "); -fx-font-size: " + "WINNER_IS_TEXT_SIZE" + "; -fx-font-family: Arial");
+        WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
 
         WINNER_IS_LABEL.setAlignment(Pos.CENTER);
         CENTER_BORDERPANE.setCenter(WINNER_IS_LABEL);
@@ -190,7 +210,9 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setGUI() {
-        getStackPane().getChildren().addAll(WIN_SCREEN_V_BOX, ANCHOR_PANE);
+        WIN_SCREEN_V_BOX.setPickOnBounds(false);
+        ANCHOR_PANE.setPickOnBounds(false);
+        getStackPane().getChildren().addAll(ANCHOR_PANE, WIN_SCREEN_V_BOX);
     }
 
     private void setupBottomRightHBox() {
@@ -204,12 +226,19 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setPositionOfNodes() {
-        PositionOfNodes.setAllFourPositions(MONEY_LABEL, HELP_BUTTON, INSERT_MONEY_LABEL, SUBTOTAL_LABEL, MARGIN_ANCHOR_PANE);
+        PositionOfNodes.setAllFourPositions(MONEY_LABEL, HELP_BUTTON, INSERT_MONEY_LABEL, MARGIN_ANCHOR_PANE);
         PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_LABEL, MARGIN_MONEY_LABEL, MARGIN_MONEY_INSERTS);
         PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_TEXT_FIELD, MARGIN_MONEY_INSERTS, MARGIN_BUTTONS);
         PositionOfNodes.setBottomRightLbl(BOTTOM_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
         PositionOfNodes.setTopRightLbl(TOP_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
         PositionOfNodes.setBottomRightForSpecials(H_BOX_SET_BUTTON, MARGIN_ANCHOR_PANE, MARGIN_BUTTONS);
+    }
+
+    private void setupVariablesForNewGame() {
+        player = blackjack.getPlayer();
+        dealer = blackjack.getDealer();
+        playerCards = player.getCards();
+        dealerCards = dealer.getCards();
     }
 
     private void setupVariables() {
@@ -236,7 +265,7 @@ public class BlackjackScene extends BackgroundScene {
         BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD);
         SET_BUTTON.setOnAction(betButtonHandler);
 
-        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack);
+        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack, this);
         PLAY_AGAIN_BUTTON.setOnAction(replayButtonHandler);
 
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());

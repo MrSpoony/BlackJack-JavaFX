@@ -86,7 +86,6 @@ public class Blackjack {
     }
 
     public void newGame() {
-        System.out.println("oaienstaorisentariosentaroisent");
         setupNewGame();
     }
 
@@ -148,14 +147,13 @@ public class Blackjack {
     }
 
     private void setupNewGame() {
-        System.out.println("Yoienaoriesntaorien");
         setupNewPlayers();
         setupVariables();
         dealStartCards();
     }
 
     private void setupNewPlayers() {
-        players.remove(1);
+        dealer = new Dealer(mainStack);
         getCurrentRealPlayer().clear();
         players.add(new Dealer(mainStack));
     }
