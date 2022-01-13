@@ -281,26 +281,48 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setupButtonHandlers() {
-        SplitButtonHandler splitButtonHandler = new SplitButtonHandler(player);
-        SPLIT_BUTTON.setOnAction(splitButtonHandler);
+        setupSplitButtonHandler();
+        setupDoubleButtonHandler();
+        setupHitButtonHandler();
+        setupHoldButtonHandler();
+        setupBetButtonHandler();
+        setupReplayButtonHandler();
+        setupOtherButtons();
+    }
 
-        DoubleButtonHandler doubleButtonHandler = new DoubleButtonHandler(player);
-        DOUBLE_BUTTON.setOnAction(doubleButtonHandler);
-
-        HitButtonHandler hitButtonHandler = new HitButtonHandler(player);
-        HIT_BUTTON.setOnAction(hitButtonHandler);
-
-        HoldButtonHandler holdButtonHandler = new HoldButtonHandler(player);
-        HOLD_BUTTON.setOnAction(holdButtonHandler);
-
-        BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD, this);
-        SET_BUTTON.setOnAction(betButtonHandler);
-
-        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack, this);
-        PLAY_AGAIN_BUTTON.setOnAction(replayButtonHandler);
-
+    private void setupOtherButtons() {
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
         HELP_BUTTON.setOnAction(e -> app.getHostServices().showDocument(HELP_LINK));
+    }
+
+    private void setupReplayButtonHandler() {
+        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack, this);
+        PLAY_AGAIN_BUTTON.setOnAction(replayButtonHandler);
+    }
+
+    private void setupBetButtonHandler() {
+        BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD, this);
+        SET_BUTTON.setOnAction(betButtonHandler);
+    }
+
+    private void setupHoldButtonHandler() {
+        HoldButtonHandler holdButtonHandler = new HoldButtonHandler(player);
+        HOLD_BUTTON.setOnAction(holdButtonHandler);
+    }
+
+    private void setupHitButtonHandler() {
+        HitButtonHandler hitButtonHandler = new HitButtonHandler(player);
+        HIT_BUTTON.setOnAction(hitButtonHandler);
+    }
+
+    private void setupDoubleButtonHandler() {
+        DoubleButtonHandler doubleButtonHandler = new DoubleButtonHandler(player);
+        DOUBLE_BUTTON.setOnAction(doubleButtonHandler);
+    }
+
+    private void setupSplitButtonHandler() {
+        SplitButtonHandler splitButtonHandler = new SplitButtonHandler(player);
+        SPLIT_BUTTON.setOnAction(splitButtonHandler);
     }
 
     private void clearCanvas() {
@@ -311,15 +333,16 @@ public class BlackjackScene extends BackgroundScene {
         double posXPlayerCards = PLAYER_CARDS_INITIAL_X;
         calculatePlayerXIncrement();
         if (waitingForMoneySet) {
-            for (int i = 0; i < 2; i++) {
-                gc.drawImage(BACK_CARD_IMAGE, posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
-                posXPlayerCards += playerXIncrement;
-            }
+            drawTwoHiddenCards(posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS, playerXIncrement);
         } else {
-            for (Card card : playerCards) {
-                gc.drawImage(card.getImage(), posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
-                posXPlayerCards += playerXIncrement;
-            }
+            drawOpenPlayerCards(posXPlayerCards);
+        }
+    }
+
+    private void drawOpenPlayerCards(double posXPlayerCards) {
+        for (Card card : playerCards) {
+            gc.drawImage(card.getImage(), posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
+            posXPlayerCards += playerXIncrement;
         }
     }
 
@@ -327,14 +350,10 @@ public class BlackjackScene extends BackgroundScene {
         double posXDealerCards = DEALER_CARDS_INITIAL_X;
         calculateDealerXIncrement();
         if (waitingForMoneySet) {
-            gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
-            posXDealerCards += dealerXIncrement;
-            gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+            drawTwoHiddenCards(posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS, dealerXIncrement);
         } else {
             if (!dealer.isDealersTurn()) {
-                gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
-                posXDealerCards += dealerXIncrement;
-                gc.drawImage(dealer.getCards().get(1).getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+                drawBeginningTwoCards(posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS, dealerXIncrement, dealer.getCards().get(1).getImage());
             } else {
                 for (Card card : dealerCards) {
                     gc.drawImage(card.getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
@@ -344,18 +363,28 @@ public class BlackjackScene extends BackgroundScene {
         }
     }
 
+    private void drawBeginningTwoCards(double posXDealerCards, double positionYDealerCards, double widthDealerCards, double heightDealerCards, double dealerXIncrement, Image dealer) {
+        gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, positionYDealerCards, widthDealerCards, heightDealerCards);
+        posXDealerCards += dealerXIncrement;
+        gc.drawImage(dealer, posXDealerCards, positionYDealerCards, widthDealerCards, heightDealerCards);
+    }
+
+    private void drawTwoHiddenCards(double posXDealerCards, double positionYDealerCards, double widthDealerCards, double heightDealerCards, double dealerXIncrement) {
+        drawBeginningTwoCards(posXDealerCards, positionYDealerCards, widthDealerCards, heightDealerCards, dealerXIncrement, BlackjackScene.BACK_CARD_IMAGE);
+    }
+
     private void calculatePlayerXIncrement() {
-        if (playerCards.size() * playerXIncrement >= PLAYER_CARDS_X_SPACE) {
-            if (playerXIncrement > PLAYER_CARDS_INCREMENT_CHANGE) {
-                playerXIncrement -= PLAYER_CARDS_INCREMENT_CHANGE;
-            }
-        }
+        calculateIncrement(playerCards, playerXIncrement, PLAYER_CARDS_X_SPACE, playerXIncrement > PLAYER_CARDS_INCREMENT_CHANGE, PLAYER_CARDS_INCREMENT_CHANGE);
     }
 
     private void calculateDealerXIncrement() {
-        if (dealerCards.size() * dealerXIncrement >= DEALER_CARDS_X_SPACE) {
-            if (dealerXIncrement >= DEALER_CARDS_INCREMENT_CHANGE) {
-                dealerXIncrement -= DEALER_CARDS_INCREMENT_CHANGE;
+        calculateIncrement(dealerCards, dealerXIncrement, DEALER_CARDS_X_SPACE, dealerXIncrement >= DEALER_CARDS_INCREMENT_CHANGE, DEALER_CARDS_INCREMENT_CHANGE);
+    }
+
+    private void calculateIncrement(List<Card> cards, double xIncrement, double cardsXSpace, boolean xIncrement1, double cardsIncrementChange) {
+        if (cards.size() * xIncrement >= cardsXSpace) {
+            if (xIncrement1) {
+                xIncrement -= cardsIncrementChange;
             }
         }
     }
