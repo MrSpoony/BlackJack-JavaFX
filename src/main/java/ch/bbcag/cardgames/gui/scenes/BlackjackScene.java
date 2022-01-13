@@ -11,6 +11,7 @@ import ch.bbcag.cardgames.common.scene.Navigator;
 import ch.bbcag.cardgames.gui.common.LabelLayout;
 import ch.bbcag.cardgames.gui.common.PositionOfNodes;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -52,6 +53,9 @@ public class BlackjackScene extends BackgroundScene {
 
     private static final String PATH_TO_BACK_CARD = "/pokerdeck/1B.png";
     private static final Image BACK_CARD_IMAGE = new Image(Objects.requireNonNull(BlackjackScene.class.getResourceAsStream(PATH_TO_BACK_CARD)));
+
+
+    private static final String HELP_LINK = "https://www.blackjackapprenticeship.com/blackjACK-STRATEGY-CHARTS";
 
     private static final TransparentButton SPLIT_BUTTON = new TransparentButton("Split");
     private static final TransparentButton DOUBLE_BUTTON = new TransparentButton("Double");
@@ -97,8 +101,11 @@ public class BlackjackScene extends BackgroundScene {
 
     private String winner = "";
 
-    public BlackjackScene(Navigator navigator) {
+    private Application app;
+
+    public BlackjackScene(Navigator navigator, Application application) {
         super(navigator);
+        app = application;
     }
 
     @Override
@@ -272,6 +279,7 @@ public class BlackjackScene extends BackgroundScene {
         PLAY_AGAIN_BUTTON.setOnAction(replayButtonHandler);
 
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
+        HELP_BUTTON.setOnAction(e -> app.getHostServices().showDocument(HELP_LINK));
     }
 
     private void clearCanvas() {

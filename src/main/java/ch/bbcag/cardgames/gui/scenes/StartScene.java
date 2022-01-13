@@ -2,12 +2,14 @@ package ch.bbcag.cardgames.gui.scenes;
 
 import ch.bbcag.cardgames.common.scene.BaseScene;
 import ch.bbcag.cardgames.common.scene.Navigator;
+import ch.bbcag.cardgames.common.scene.SceneType;
 import ch.bbcag.cardgames.gui.common.TextLayout;
 import ch.bbcag.cardgames.gui.common.TitleLayout;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
-import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -41,6 +43,14 @@ public class StartScene extends BackgroundScene {
     private static final double WIDTH_CARD = 250;
     private static final double HEIGHT_CARD = 350;
 
+    private static final int RIGHT_INSETS = 120;
+    private static final int LEFT_INSETS = 50;
+
+    private static final int POS_X_Y_ARROW = 60;
+
+    private static final int ANGLE_AC = -30;
+    private static final int ANGLE_AH = 30;
+
     private static final Image as = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AS)));
     private static final Image ac = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AC)));
     private static final Image ah = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AH)));
@@ -52,24 +62,10 @@ public class StartScene extends BackgroundScene {
     private static final BorderPane MAIN_BORDER_PANE = new BorderPane();
     private static final VBox MAIN_VBOX = new VBox();
 
-    private static final int NULL = 0;
-    private static final int RIGHT_INSETS = 120;
-    private static final int LEFT_INSETS = 50;
+    private static final Button BTN_1_CARD = new Button("");
 
-    private static final int POS_X_Y_ARROW = 60;
-
-    private static final int ANGLE_AC = -30;
-    private static final int ANGLE_AH = 30;
-
-    private static final TransparentButton BTN_1_CARD = new TransparentButton("");
-
-    private static final String link = "https://www.blackjackapprenticeship.com/blackjACK-STRATEGY-CHARTS";
-
-    private Application app;
-
-    public StartScene(Navigator navigator, Application app) {
+    public StartScene(Navigator navigator) {
         super(navigator);
-        this.app = app;
     }
 
     @Override
@@ -86,12 +82,11 @@ public class StartScene extends BackgroundScene {
 
     private void drawImages() {
         drawRotatedImage(gc, ac, ANGLE_AC, POS_X_FOR_AC, POS_Y_FOR_AC);
-        drawRotatedImage(gc, as, NULL, POS_X_FOR_AS, POS_Y_FOR_AS);
+        drawRotatedImage(gc, as, 0, POS_X_FOR_AS, POS_Y_FOR_AS);
         drawRotatedImage(gc, ah, ANGLE_AH, POS_X_FOR_AH, POS_Y_FOR_AH);
 
         gc.drawImage(arrow, POS_X_Y_ARROW, POS_X_Y_ARROW);
     }
-
 
     @Override
     public void onEnter() {
@@ -100,7 +95,7 @@ public class StartScene extends BackgroundScene {
         setupButtonsAsPicture();
     }
 
-    private void setupButtonsAsPicture(){
+    private void setupButtonsAsPicture() {
         ImageView asForBlackJack = new ImageView(ad);
         asForBlackJack.setRotate(asForBlackJack.getRotate() + 45);
         asForBlackJack.setFitHeight(HEIGHT_CARD);
@@ -108,22 +103,22 @@ public class StartScene extends BackgroundScene {
         BTN_1_CARD.setGraphic(asForBlackJack);
         BTN_1_CARD.setLayoutX(POS_X_FOR_AD);
         BTN_1_CARD.setLayoutY(POS_Y_FOR_AD);
-        BTN_1_CARD.setOnAction(e -> app.getHostServices().showDocument(link));
+        BTN_1_CARD.setOnAction(e -> nav.navigateTo(SceneType.BLACKJACK));
     }
 
     private void setupBorderPane() {
         setupVBox();
         MAIN_BORDER_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
-        MAIN_BORDER_PANE.setPadding(new Insets(NULL, RIGHT_INSETS, NULL, LEFT_INSETS));
+        MAIN_BORDER_PANE.setPadding(new Insets(0, RIGHT_INSETS, 0, LEFT_INSETS));
         MAIN_BORDER_PANE.setRight(BLACKJACK);
         MAIN_BORDER_PANE.setTop(CARDGAMES);
 
 
         MAIN_BORDER_PANE.getChildren().addAll(BTN_1_CARD, MAIN_VBOX);
-        getGroup().getChildren().add(MAIN_BORDER_PANE);
+        getStackPane().getChildren().add(MAIN_BORDER_PANE);
     }
 
-    private void setupVBox(){
+    private void setupVBox() {
         MAIN_VBOX.getChildren().addAll(BLACKJACK, CARDGAMES);
         MAIN_VBOX.setSpacing(100);
     }

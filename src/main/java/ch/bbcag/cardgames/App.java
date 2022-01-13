@@ -17,10 +17,10 @@ public class App extends Application {
     public void start(Stage stage) {
         Navigator nav = new Navigator(stage);
 
-        nav.registerScene(SceneType.BLACKJACK, new BlackjackScene(nav));
-        nav.registerScene(SceneType.TITLE, new StartScene(nav, this));
+        nav.registerScene(SceneType.BLACKJACK, new BlackjackScene(nav, this));
+        nav.registerScene(SceneType.TITLE, new StartScene(nav));
 
-        nav.navigateTo(SceneType.BLACKJACK);
+        nav.navigateTo(SceneType.TITLE);
 
         stage.show();
     }
