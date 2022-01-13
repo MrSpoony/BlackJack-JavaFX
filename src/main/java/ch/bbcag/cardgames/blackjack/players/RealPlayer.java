@@ -1,9 +1,11 @@
 package ch.bbcag.cardgames.blackjack.players;
 
+import ch.bbcag.cardgames.blackjack.Count;
 import ch.bbcag.cardgames.blackjack.Stack;
 
 public class RealPlayer extends Player {
 
+    private static final int MAX_CARD_VALUE = 21;
     private boolean hit;
 
     public RealPlayer(Stack stack) {
@@ -13,10 +15,14 @@ public class RealPlayer extends Player {
     @Override
     public void turn() {
         if (hit) {
-            takeCard();
+            if(canTakeACard()) takeCard();
         } else {
             pass();
         }
+    }
+
+    public boolean canTakeACard() {
+        return getCount(Count.BEST, getCards()) < MAX_CARD_VALUE;
     }
 
     @Override

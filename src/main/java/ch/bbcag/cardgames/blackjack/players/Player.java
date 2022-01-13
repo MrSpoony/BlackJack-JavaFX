@@ -74,8 +74,6 @@ public abstract class Player {
         }
     }
 
-
-
     protected void doSplit() {
         isSplit = true;
         splitCards.add(activeCards.get(1));
@@ -129,6 +127,10 @@ public abstract class Player {
         return count;
     }
 
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
     public boolean isDone() {
         return done;
     }
@@ -151,6 +153,10 @@ public abstract class Player {
 
     public List<Card> getSplitCards() {
         return splitCards;
+    }
+
+    public void setSplitHappend(boolean splitHappend) {
+        isSplitHappend = splitHappend;
     }
 
     public boolean isSplitHappend() {
