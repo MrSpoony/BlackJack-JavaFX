@@ -18,11 +18,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class BlackjackScene extends BackgroundScene {
@@ -55,6 +55,7 @@ public class BlackjackScene extends BackgroundScene {
     private static final TransparentButton HELP_BUTTON = new TransparentButton("Help");
     private static final TransparentButton SET_BUTTON = new TransparentButton("Set");
     private static final TransparentButton EXIT_BUTTON = new TransparentButton("Exit");
+    private static final TransparentButton PLAY_AGAIN_BUTTON = new TransparentButton("Play again?");
 
     private static final LabelLayout MONEY_LABEL = new LabelLayout("Money:");
     private static final LabelLayout SUBTOTAL_LABEL = new LabelLayout("Subtotal:");
@@ -71,11 +72,13 @@ public class BlackjackScene extends BackgroundScene {
     private static final double MARGIN_BUTTONS = 50.0;
 
     private static final double SPACING_IN_H_BOXES = 5;
+    private static final double SPACING_IN_V_BOX = 20;
 
     private static final AnchorPane ANCHOR_PANE = new AnchorPane();
     private static final HBox BOTTOM_RIGHT_H_BOX = new HBox();
     private static final HBox TOP_RIGHT_H_BOX = new HBox();
     private static final HBox H_BOX_SET_BUTTON = new HBox();
+    private static final VBox WIN_SCREEN_V_BOX = new VBox(SPACING_IN_V_BOX);
     private static final BorderPane CENTER_BORDERPANE = new BorderPane();
 
     private double playerXIncrement = WIDTH_PLAYER_CARDS - 25;
@@ -96,14 +99,14 @@ public class BlackjackScene extends BackgroundScene {
 
     @Override
     public void update(double deltaInSec) {
-        setButtonAvailableness();
+        setButtonAvailable();
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
         updateVariables();
         updateMoneyLabel();
         if (player.isDone()) {
             winner = blackjack.dealerTurn();
             WINNER_IS_LABEL.setText(winner);
-
+            showPlayAgainButton();
         }
     }
 
@@ -128,20 +131,31 @@ public class BlackjackScene extends BackgroundScene {
     private void setupScene() {
         setupVariables();
         setupButtonHandlers();
-        setupCenterBorderPane();
         setPositionOfNodes();
         setupHBoxes();
-        setupAnchorpane();
+        setupAnchorPane();
+        setupEndScreen();
+        setGUI();
     }
 
     private void updateMoneyLabel() {
         MONEY_LABEL.setText("Your Money: " + player.getMoney());
     }
 
-    private void setButtonAvailableness() {
+    private void setButtonAvailable() {
         if (!player.isSplitPossible()) SPLIT_BUTTON.setButtonNotAvailable();
         if (!player.canTakeACard()) HIT_BUTTON.setButtonNotAvailable();
         if (!player.isDoubleDownPossible()) DOUBLE_BUTTON.setButtonNotAvailable();
+    }
+
+    private void hidePlayAgainButton() {
+        PLAY_AGAIN_BUTTON.setDisable(true);
+        PLAY_AGAIN_BUTTON.setVisible(false);
+    }
+
+    private void showPlayAgainButton() {
+        PLAY_AGAIN_BUTTON.setDisable(false);
+        PLAY_AGAIN_BUTTON.setVisible(true);
     }
 
     private void setupHBoxes() {
@@ -150,19 +164,24 @@ public class BlackjackScene extends BackgroundScene {
         setupBottomRightHBox();
     }
 
-    private void setupAnchorpane() {
+    private void setupAnchorPane() {
         INSERT_MONEY_TEXT_FIELD.setPrefSize(MONEY_TEXT_FIELD_WIDTH, MONEY_TEXT_FIELD_HEIGHT);
         ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
         ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, SUBTOTAL_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
-        getGroup().getChildren().addAll(CENTER_BORDERPANE, ANCHOR_PANE);
     }
 
-    private void setupCenterBorderPane(){
+    private void setupEndScreen() {
+        hidePlayAgainButton();
+        WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
         WINNER_IS_LABEL.setMaxWidth(Double.MAX_VALUE);
         WINNER_IS_LABEL.setMaxHeight(Double.MAX_VALUE);
         WINNER_IS_LABEL.setAlignment(Pos.CENTER);
-
         CENTER_BORDERPANE.setCenter(WINNER_IS_LABEL);
+        WIN_SCREEN_V_BOX.setAlignment(Pos.CENTER);
+    }
+
+    private void setGUI() {
+        getGroup().getChildren().addAll(WIN_SCREEN_V_BOX, ANCHOR_PANE);
     }
 
     private void setupBottomRightHBox() {
