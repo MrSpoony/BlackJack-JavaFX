@@ -38,7 +38,7 @@ public abstract class Player {
     }
 
     public boolean isDoubleDownPossible() {
-        return isAtFirstTurn();
+        return money >= bet && isAtFirstTurn();
     }
 
     public abstract void turn();
