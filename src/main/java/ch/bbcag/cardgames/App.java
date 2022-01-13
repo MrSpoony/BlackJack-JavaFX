@@ -18,8 +18,7 @@ public class App extends Application {
         Navigator nav = new Navigator(stage);
 
         nav.registerScene(SceneType.BLACKJACK, new BlackjackScene(nav));
-        nav.registerScene(SceneType.TITLE, new StartScene(nav));
-
+        nav.registerScene(SceneType.TITLE, new StartScene(nav, this));
 
         nav.navigateTo(SceneType.BLACKJACK);
 
