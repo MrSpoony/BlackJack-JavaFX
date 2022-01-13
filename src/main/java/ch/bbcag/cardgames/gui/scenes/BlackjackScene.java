@@ -2,10 +2,7 @@ package ch.bbcag.cardgames.gui.scenes;
 
 
 import ch.bbcag.cardgames.blackjack.Blackjack;
-import ch.bbcag.cardgames.blackjack.buttonhandler.DoubleButtonHandler;
-import ch.bbcag.cardgames.blackjack.buttonhandler.HitButtonHandler;
-import ch.bbcag.cardgames.blackjack.buttonhandler.HoldButtonHandler;
-import ch.bbcag.cardgames.blackjack.buttonhandler.SplitButtonHandler;
+import ch.bbcag.cardgames.blackjack.buttonhandler.*;
 import ch.bbcag.cardgames.blackjack.players.Dealer;
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
 import ch.bbcag.cardgames.common.cards.Card;
@@ -75,6 +72,7 @@ public class BlackjackScene extends BackgroundScene {
     private double playerXIncrement = WIDTH_PLAYER_CARDS - 25;
     private double dealerXIncrement = WIDTH_DEALER_CARDS - 25;
 
+
     private List<Card> playerCards = new ArrayList<>();
     private List<Card> dealerCards = new ArrayList<>();
 
@@ -91,6 +89,7 @@ public class BlackjackScene extends BackgroundScene {
         setButtonAvailableness();
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
         updateVariables();
+        updateMoneyLabel();
         if (player.isDone()) {
             blackjack.dealerTurn();
         }
@@ -100,13 +99,21 @@ public class BlackjackScene extends BackgroundScene {
     public void paint() {
         clearCanvas();
         super.paint();
-        drawPlayerCards();
-        drawDealerCards();
+        drawCards();
     }
 
     @Override
     public void onEnter() {
         super.onEnter();
+        setupScene();
+    }
+
+    private void drawCards() {
+        drawPlayerCards();
+        drawDealerCards();
+    }
+
+    private void setupScene() {
         setupVariables();
         setupButtonHandlers();
         setPositionOfNodes();
@@ -114,9 +121,14 @@ public class BlackjackScene extends BackgroundScene {
         setupAnchorpane();
     }
 
+    private void updateMoneyLabel() {
+        MONEY_LABEL.setText(Integer.toString(player.getMoney()));
+    }
+
     private void setButtonAvailableness() {
         if (!player.isSplitPossible()) SPLIT_BUTTON.setButtonNotAvailable();
         if (!player.canTakeACard()) HIT_BUTTON.setButtonNotAvailable();
+        if (!player.isDoubleDownPossible()) DOUBLE_BUTTON.setButtonNotAvailable();
     }
 
     private void setupHBoxes() {
@@ -161,13 +173,19 @@ public class BlackjackScene extends BackgroundScene {
 
     private void setupButtonHandlers() {
         SplitButtonHandler splitButtonHandler = new SplitButtonHandler(player);
-        DoubleButtonHandler doubleButtonHandler = new DoubleButtonHandler(player);
-        HitButtonHandler hitButtonHandler = new HitButtonHandler(player);
-        HoldButtonHandler holdButtonHandler = new HoldButtonHandler(player);
-        DOUBLE_BUTTON.setOnAction(doubleButtonHandler);
         SPLIT_BUTTON.setOnAction(splitButtonHandler);
-        HOLD_BUTTON.setOnAction(holdButtonHandler);
+
+        DoubleButtonHandler doubleButtonHandler = new DoubleButtonHandler(player);
+        DOUBLE_BUTTON.setOnAction(doubleButtonHandler);
+
+        HitButtonHandler hitButtonHandler = new HitButtonHandler(player);
         HIT_BUTTON.setOnAction(hitButtonHandler);
+
+        HoldButtonHandler holdButtonHandler = new HoldButtonHandler(player);
+        HOLD_BUTTON.setOnAction(holdButtonHandler);
+
+        BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD);
+        SET_BUTTON.setOnAction(betButtonHandler);
     }
 
     private void clearCanvas() {

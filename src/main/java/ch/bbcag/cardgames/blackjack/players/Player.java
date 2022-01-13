@@ -31,7 +31,11 @@ public abstract class Player {
     }
 
     public boolean isSplitPossible() {
-        return activeCards.get(0).getFace() == activeCards.get(1).getFace() && activeCards.size() == NUMBER_OF_CARDS_TO_GET_AT_BEGIN;
+        return activeCards.get(0).getFace() == activeCards.get(1).getFace() && isAtFirstTurn() && !isSplit;
+    }
+
+    public boolean isDoubleDownPossible() {
+        return isAtFirstTurn();
     }
 
     public abstract void turn();
@@ -162,4 +166,9 @@ public abstract class Player {
     public boolean isSplitHappend() {
         return splitHappend;
     }
+
+    private boolean isAtFirstTurn() {
+        return (activeCards.size() == NUMBER_OF_CARDS_TO_GET_AT_BEGIN && beforeSplitCards.isEmpty() && splitCards.isEmpty());
+    }
+
 }

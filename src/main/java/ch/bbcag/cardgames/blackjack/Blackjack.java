@@ -12,7 +12,7 @@ public class Blackjack {
     public static final int VALUE_TO_WIN = 21;
     public static final int NUMBER_OF_CARDS_TO_GET_AT_BEGIN = 2;
     private static final int NUMBER_OF_DECKS_USED = 3;
-    private static final int NUMBER_OF_PLAYERS = 1;
+    private static final int INITIAL_PLAYER_MONEY = 1000;
 
     private int numberOfRealPlayers;
     private int dealerHand;
@@ -105,7 +105,7 @@ public class Blackjack {
     }
 
     private void setupPlayers() {
-        players.add(new RealPlayer(mainStack));
+        players.add(new RealPlayer(mainStack, INITIAL_PLAYER_MONEY));
         players.add(new Dealer(mainStack));
     }
 

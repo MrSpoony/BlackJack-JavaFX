@@ -65,5 +65,6 @@ public abstract class BaseScene extends Scene implements Initialization {
 
     public void onExit() {
         exiting = true;
+        getGroup().getChildren().removeAll();
     }
 }

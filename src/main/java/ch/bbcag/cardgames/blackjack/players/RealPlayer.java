@@ -8,8 +8,11 @@ public class RealPlayer extends Player {
     private static final int MAX_CARD_VALUE = 21;
     private boolean hit;
 
-    public RealPlayer(Stack stack) {
+    private int money;
+
+    public RealPlayer(Stack stack, int money) {
         super(stack);
+        this.money = money;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class RealPlayer extends Player {
     }
 
     public boolean canTakeACard() {
-        return getCount(Count.BEST, getCards()) < MAX_CARD_VALUE;
+        return getCount(Count.LOW, getCards()) < MAX_CARD_VALUE;
     }
 
     @Override
@@ -37,5 +40,13 @@ public class RealPlayer extends Player {
     public void setDone(boolean done) {
         this.done = done;
 
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }
