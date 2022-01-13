@@ -27,8 +27,6 @@ import java.util.Objects;
 
 public class BlackjackScene extends BackgroundScene {
 
-    private static final int NUMBER_OF_PLAYERS = 1;
-
     private static final double CARDS_Y_OFFSET = 50;
 
     private static final double WIDTH_PLAYER_CARDS = 125;
@@ -108,11 +106,9 @@ public class BlackjackScene extends BackgroundScene {
         setButtonAvailable();
         updateVariables();
         updateMoneyLabel();
-        if (player.isDone()) {
-            winner = blackjack.dealerTurn();
-            showPlayAgain();
-        }
+        doWhenPlayerDone();
     }
+
 
     @Override
     public void paint() {
@@ -147,6 +143,13 @@ public class BlackjackScene extends BackgroundScene {
         setupAnchorPane();
         setupEndScreen();
         setGUI();
+    }
+
+    private void doWhenPlayerDone() {
+        if (player.isDone()) {
+            winner = blackjack.dealersTurn();
+            showPlayAgain();
+        }
     }
 
     private void updateMoneyLabel() {
@@ -199,7 +202,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private void setupEndScreen() {
         hidePlayAgainButton();
-        PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA+ "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
+        PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA + "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
                 " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + ";");
         WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
         WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
@@ -242,7 +245,7 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setupVariables() {
-        blackjack = new Blackjack(NUMBER_OF_PLAYERS);
+        blackjack = new Blackjack();
         player = blackjack.getPlayer();
         dealer = blackjack.getDealer();
         playerCards = player.getCards();
