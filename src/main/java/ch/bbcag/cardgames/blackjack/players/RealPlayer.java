@@ -17,7 +17,7 @@ public class RealPlayer extends Player {
     @Override
     public void turn() {
         if (hit) {
-            if(canTakeACard()) takeCard();
+            if (canTakeACard()) takeCard();
         } else {
             pass();
         }

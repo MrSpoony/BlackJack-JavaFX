@@ -88,6 +88,8 @@ public class BlackjackScene extends BackgroundScene {
     private static final VBox WIN_SCREEN_V_BOX = new VBox(SPACING_IN_V_BOX);
     private static final BorderPane CENTER_BORDERPANE = new BorderPane();
 
+    private final Application APP;
+
     private double playerXIncrement = WIDTH_PLAYER_CARDS - 25;
     private double dealerXIncrement = WIDTH_DEALER_CARDS - 25;
 
@@ -101,11 +103,10 @@ public class BlackjackScene extends BackgroundScene {
     private String winner = "";
     private boolean waitingForMoneySet = true;
 
-    private Application app;
 
     public BlackjackScene(Navigator navigator, Application application) {
         super(navigator);
-        app = application;
+        APP = application;
     }
 
     @Override
@@ -199,12 +200,16 @@ public class BlackjackScene extends BackgroundScene {
 
     private void showPlayAgain() {
         showPlayAgainButton();
+        setPlayAgainLabel();
+        WINNER_IS_LABEL.setText(winner);
+    }
+
+    private void setPlayAgainLabel() {
         if (winner.contains("\n")) {
             WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE_ON_SPLIT + "; -fx-font-family: Arial");
         } else {
             WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
         }
-        WINNER_IS_LABEL.setText(winner);
     }
 
     private void hidePlayAgain() {
@@ -298,11 +303,11 @@ public class BlackjackScene extends BackgroundScene {
 
     private void setupOtherButtons() {
         EXIT_BUTTON.setOnAction(actionEvent -> Platform.exit());
-        HELP_BUTTON.setOnAction(e -> app.getHostServices().showDocument(HELP_LINK));
+        HELP_BUTTON.setOnAction(e -> APP.getHostServices().showDocument(HELP_LINK));
     }
 
     private void setupReplayButtonHandler() {
-        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack, this);
+        ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(this);
         PLAY_AGAIN_BUTTON.setOnAction(replayButtonHandler);
     }
 
@@ -337,7 +342,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private void drawPlayerCards() {
         double posXPlayerCards = PLAYER_CARDS_INITIAL_X;
-        calculatePlayerXIncrement();
+        playerXIncrement = calculatePlayerXIncrement();
         if (waitingForMoneySet) {
             drawTwoHiddenCards(posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS, playerXIncrement);
         } else {
@@ -354,7 +359,7 @@ public class BlackjackScene extends BackgroundScene {
 
     private void drawDealerCards() {
         double posXDealerCards = DEALER_CARDS_INITIAL_X;
-        calculateDealerXIncrement();
+        dealerXIncrement = calculateDealerXIncrement();
         if (waitingForMoneySet) {
             drawTwoHiddenCards(posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS, dealerXIncrement);
         } else {
@@ -379,20 +384,21 @@ public class BlackjackScene extends BackgroundScene {
         drawBeginningTwoCards(posXDealerCards, positionYDealerCards, widthDealerCards, heightDealerCards, dealerXIncrement, BlackjackScene.BACK_CARD_IMAGE);
     }
 
-    private void calculatePlayerXIncrement() {
-        calculateIncrement(playerCards, playerXIncrement, PLAYER_CARDS_X_SPACE, playerXIncrement > PLAYER_CARDS_INCREMENT_CHANGE, PLAYER_CARDS_INCREMENT_CHANGE);
+    private double calculatePlayerXIncrement() {
+        return calculateIncrement(playerCards, playerXIncrement, PLAYER_CARDS_X_SPACE, PLAYER_CARDS_INCREMENT_CHANGE, PLAYER_CARDS_INCREMENT_CHANGE);
     }
 
-    private void calculateDealerXIncrement() {
-        calculateIncrement(dealerCards, dealerXIncrement, DEALER_CARDS_X_SPACE, dealerXIncrement >= DEALER_CARDS_INCREMENT_CHANGE, DEALER_CARDS_INCREMENT_CHANGE);
+    private double calculateDealerXIncrement() {
+        return calculateIncrement(dealerCards, dealerXIncrement, DEALER_CARDS_X_SPACE, DEALER_CARDS_INCREMENT_CHANGE, DEALER_CARDS_INCREMENT_CHANGE);
     }
 
-    private void calculateIncrement(List<Card> cards, double xIncrement, double cardsXSpace, boolean xIncrement1, double cardsIncrementChange) {
-        if (cards.size() * xIncrement >= cardsXSpace) {
-            if (xIncrement1) {
-                xIncrement -= cardsIncrementChange;
+    private double calculateIncrement(List<Card> cards, double initialXIncrement, double cardsXSpace, double incrementChange, double cardsIncrementChange) {
+        if (cards.size() * initialXIncrement >= cardsXSpace) {
+            if (initialXIncrement >= incrementChange) {
+                initialXIncrement -= cardsIncrementChange;
             }
         }
+        return initialXIncrement;
     }
 
     private void updateVariables() {

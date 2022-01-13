@@ -1,9 +1,6 @@
 package ch.bbcag.cardgames.common.cards;
 
-import ch.bbcag.cardgames.common.cards.enums.DeckName;
-
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Deck extends CopyOnWriteArrayList<Card> implements List<Card> {
@@ -14,37 +11,13 @@ public class Deck extends CopyOnWriteArrayList<Card> implements List<Card> {
 
     private static final String IMAGE_ENDING = ".png";
 
-    private int numberOfFaces;
-    private int numberOfSuits;
-    private int startNumber;
 
-    private DeckName deckName;
-
-    public Deck(DeckName deckName) {
-        this.deckName = deckName;
-        setVariables();
+    public Deck() {
         addCards();
     }
 
-    public Card getRandomCard() {
-        Random random = new Random();
-        return get(random.nextInt(size()));
-    }
-
-    private void setVariables() {
-        switch (deckName) {
-            case POKER -> {
-                numberOfFaces = NUMBER_OF_POKER_FACES;
-                numberOfSuits = NUMBER_OF_POKER_SUITS;
-                startNumber = POKER_START_NUMBER;
-            }
-        }
-    }
-
     private void addCards() {
-        switch (deckName) {
-            case POKER -> createPokerDeck();
-        }
+        createPokerDeck();
     }
 
     private void createPokerDeck() {

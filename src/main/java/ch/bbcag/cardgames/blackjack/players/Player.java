@@ -45,7 +45,7 @@ public abstract class Player {
     public abstract void split();
 
     public void doDoubleDown() {
-        bet *= 2;
+        bet = bet * 2;
         money -= bet;
         takeCard();
         pass();

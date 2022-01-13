@@ -5,8 +5,6 @@ import ch.bbcag.cardgames.common.scene.Navigator;
 import ch.bbcag.cardgames.common.scene.SceneType;
 import ch.bbcag.cardgames.gui.common.TextLayout;
 import ch.bbcag.cardgames.gui.common.TitleLayout;
-import ch.bbcag.cardgames.gui.common.TransparentButton;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -58,7 +56,7 @@ public class StartScene extends BackgroundScene {
     private static final Image arrow = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_ARROW)));
 
     private static final TextLayout BLACKJACK = new TextLayout("Blackjack");
-    private static final TitleLayout CARDGAMES = new TitleLayout("Select Game: ");
+    private static final TitleLayout CARD_GAMES = new TitleLayout("Select Game: ");
     private static final BorderPane MAIN_BORDER_PANE = new BorderPane();
     private static final VBox MAIN_VBOX = new VBox();
 
@@ -111,7 +109,7 @@ public class StartScene extends BackgroundScene {
         MAIN_BORDER_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
         MAIN_BORDER_PANE.setPadding(new Insets(0, RIGHT_INSETS, 0, LEFT_INSETS));
         MAIN_BORDER_PANE.setRight(BLACKJACK);
-        MAIN_BORDER_PANE.setTop(CARDGAMES);
+        MAIN_BORDER_PANE.setTop(CARD_GAMES);
 
 
         MAIN_BORDER_PANE.getChildren().addAll(BTN_1_CARD, MAIN_VBOX);
@@ -119,7 +117,7 @@ public class StartScene extends BackgroundScene {
     }
 
     private void setupVBox() {
-        MAIN_VBOX.getChildren().addAll(BLACKJACK, CARDGAMES);
+        MAIN_VBOX.getChildren().addAll(BLACKJACK, CARD_GAMES);
         MAIN_VBOX.setSpacing(100);
     }
 

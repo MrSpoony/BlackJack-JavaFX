@@ -7,29 +7,26 @@ import java.util.Map;
 
 public class Navigator {
 
-    private Stage stage;
-    private Map<SceneType, BaseScene> sceneMap = new HashMap<>();
+    private final Stage STAGE;
+    private final Map<SceneType, BaseScene> SCENE_MAP = new HashMap<>();
+
     private BaseScene currentScene;
 
     public Navigator(Stage stage) {
-        this.stage = stage;
+        this.STAGE = stage;
     }
 
     public void registerScene(SceneType sceneType, BaseScene scene) {
-        sceneMap.put(sceneType, scene);
+        SCENE_MAP.put(sceneType, scene);
     }
 
     public void navigateTo(SceneType sceneType) {
         if (currentScene != null) {
-            currentScene = (BaseScene) stage.getScene();
+            currentScene = (BaseScene) STAGE.getScene();
             currentScene.onExit();
         }
-        currentScene = sceneMap.get(sceneType);
+        currentScene = SCENE_MAP.get(sceneType);
         currentScene.onEnter();
-        stage.setScene(currentScene);
-    }
-
-    public BaseScene getScene(SceneType sceneType) {
-        return sceneMap.get(sceneType);
+        STAGE.setScene(currentScene);
     }
 }

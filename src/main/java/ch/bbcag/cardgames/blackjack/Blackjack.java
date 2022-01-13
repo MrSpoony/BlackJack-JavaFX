@@ -14,6 +14,8 @@ public class Blackjack {
     public static final int NUMBER_OF_CARDS_TO_GET_AT_BEGIN = 2;
     private static final int NUMBER_OF_DECKS_USED = 6;
     private static final int INITIAL_PLAYER_MONEY = 1000;
+
+    private static final List<Player> PLAYERS = new ArrayList<>();
     private final Stack MAIN_STACK = new Stack(NUMBER_OF_DECKS_USED);
 
     private int dealerHand;
@@ -22,14 +24,13 @@ public class Blackjack {
     private RealPlayer realPlayer;
     private Player winner;
 
-    private List<Player> players = new ArrayList<>();
 
     public Blackjack() {
         setupGame();
     }
 
     public String dealersTurn() {
-        String winnerString = "";
+        String winnerString;
 
         realPlayer.setDone(false);
         while (!dealer.isDone()) {
@@ -95,7 +96,7 @@ public class Blackjack {
     }
 
     private boolean isAmountTheSame() {
-        return players.get(players.size() - 1).getCount(Count.BEST, dealer.getCards()) == realPlayer.getCount(Count.BEST, realPlayer.getCards());
+        return PLAYERS.get(PLAYERS.size() - 1).getCount(Count.BEST, dealer.getCards()) == realPlayer.getCount(Count.BEST, realPlayer.getCards());
     }
 
     private boolean isDraw() {
@@ -103,8 +104,8 @@ public class Blackjack {
     }
 
     private void setupVariables() {
-        dealer = players.get(players.size() - 1);
-        realPlayer = (RealPlayer) players.get(0);
+        dealer = PLAYERS.get(PLAYERS.size() - 1);
+        realPlayer = (RealPlayer) PLAYERS.get(0);
         refreshCounters();
     }
 
@@ -115,7 +116,7 @@ public class Blackjack {
 
     private void dealStartCards() {
         for (int i = 0; i < NUMBER_OF_CARDS_TO_GET_AT_BEGIN; i++) {
-            for (Player player : players) {
+            for (Player player : PLAYERS) {
                 player.takeCard();
             }
         }
@@ -134,12 +135,12 @@ public class Blackjack {
     private void setupNewPlayers() {
         dealer = new Dealer(MAIN_STACK);
         realPlayer.clear();
-        players.add(new Dealer(MAIN_STACK));
+        PLAYERS.add(new Dealer(MAIN_STACK));
     }
 
     private void setupPlayers() {
-        players.add(new RealPlayer(MAIN_STACK, INITIAL_PLAYER_MONEY));
-        players.add(new Dealer(MAIN_STACK));
+        PLAYERS.add(new RealPlayer(MAIN_STACK, INITIAL_PLAYER_MONEY));
+        PLAYERS.add(new Dealer(MAIN_STACK));
     }
 
     public RealPlayer getPlayer() {
@@ -147,6 +148,6 @@ public class Blackjack {
     }
 
     public Dealer getDealer() {
-        return (Dealer) players.get(players.size() - 1);
+        return (Dealer) PLAYERS.get(PLAYERS.size() - 1);
     }
 }

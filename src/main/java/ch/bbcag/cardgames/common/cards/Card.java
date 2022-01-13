@@ -1,6 +1,5 @@
 package ch.bbcag.cardgames.common.cards;
 
-import ch.bbcag.cardgames.common.cards.enums.Suit;
 import ch.bbcag.cardgames.common.cards.enums.Face;
 import javafx.scene.image.Image;
 
@@ -11,7 +10,6 @@ public class Card {
     private static final String POKER_IMAGE_PATH = "/pokerdeck/";
 
     private int value;
-    private Suit suit;
     private Face face;
     private final Image image;
     private final String imagePath;
@@ -19,20 +17,8 @@ public class Card {
     public Card(String imagePath) {
         this.imagePath = POKER_IMAGE_PATH + imagePath;
         image = new Image(Objects.requireNonNull(this.getClass().getResourceAsStream(this.imagePath)));
-        setColor();
         setValue();
         setFace();
-    }
-
-    private void setColor() {
-        char col = imagePath.charAt(POKER_IMAGE_PATH.length() + 1);
-        switch (col) {
-            case 'C' -> suit = Suit.CLUBS;
-            case 'D' -> suit = Suit.DIAMONDS;
-            case 'H' -> suit = Suit.HEARTS;
-            case 'S' -> suit = Suit.SPADES;
-            default -> throw new IllegalArgumentException("Wrong image path, is not in Format [Value][Color]");
-        }
     }
 
     private void setValue() {
