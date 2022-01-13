@@ -38,6 +38,14 @@ public class BlackjackScene extends BackgroundScene {
     private static final double PLAYER_CARDS_X_SPACE = canvas.getWidth() - PLAYER_CARDS_INITIAL_X - 350;
     private static final double PLAYER_CARDS_INCREMENT_CHANGE = 5;
 
+    private static final double PLAY_AGAIN_BUTTON_TEXT_SIZE = 50;
+    private static final double WINNER_IS_TEXT_SIZE = 100;
+    private static final double PLAY_AGAIN_BUTTON_MAX_HEIGHT = 20;
+    private static final double PLAY_AGAIN_BUTTON_MAX_WIDTH = 350;
+    private static final String PLAY_AGAIN_BUTTON_RGBA = "0.5, 0.5, 0.5, 0.2";
+    private static final String PLAY_AGAIN_BUTTON_TEXT_RGB = "#ffffff";
+    private static final String WINNER_IS_LABEL_RGBA = "1, 1, 1, 0.7";
+
     private static final double WIDTH_DEALER_CARDS = 83;
     private static final double HEIGHT_DEALER_CARDS = 117;
     private static final double POSITION_Y_DEALER_CARDS = CARDS_Y_OFFSET;
@@ -171,9 +179,11 @@ public class BlackjackScene extends BackgroundScene {
 
     private void setupEndScreen() {
         hidePlayAgainButton();
+        PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA+ "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
+                " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + "; -fx-max-width: " + PLAY_AGAIN_BUTTON_MAX_WIDTH + ";");
         WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
-        WINNER_IS_LABEL.setMaxWidth(Double.MAX_VALUE);
-        WINNER_IS_LABEL.setMaxHeight(Double.MAX_VALUE);
+        WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + "WINNER_IS_LABEL_RGBA" + "); -fx-font-size: " + "WINNER_IS_TEXT_SIZE" + "; -fx-font-family: Arial");
+
         WINNER_IS_LABEL.setAlignment(Pos.CENTER);
         CENTER_BORDERPANE.setCenter(WINNER_IS_LABEL);
         WIN_SCREEN_V_BOX.setAlignment(Pos.CENTER);
