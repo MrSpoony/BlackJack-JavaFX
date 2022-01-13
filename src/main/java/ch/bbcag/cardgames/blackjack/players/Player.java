@@ -13,11 +13,12 @@ import static ch.bbcag.cardgames.blackjack.Blackjack.VALUE_TO_WIN;
 
 public abstract class Player {
 
+    private static final int RESHUFFLE_STACK_ON = 60;
     private final Stack stack;
     protected boolean isSplitHappend;
 
     private List<Card> beforeSplitCards = new CopyOnWriteArrayList<>();
-    private  List<Card> splitCards = new CopyOnWriteArrayList<>();
+    private List<Card> splitCards = new CopyOnWriteArrayList<>();
 
     private List<Card> activeCards = new CopyOnWriteArrayList<>();
 
@@ -25,6 +26,8 @@ public abstract class Player {
     private boolean splitHappend = false;
     protected boolean done = false;
     protected boolean isSplit = false;
+
+    protected int money;
 
     public Player(Stack stack) {
         this.stack = stack;
@@ -44,11 +47,15 @@ public abstract class Player {
 
     public void doDoubleDown() {
         bet *= 2;
+        money -= bet;
         takeCard();
         pass();
     }
 
     public void takeCard() {
+        if (stack.size() <= RESHUFFLE_STACK_ON) {
+            stack.renewStack();
+        }
         activeCards.add(stack.drawCard());
     }
 
@@ -76,6 +83,14 @@ public abstract class Player {
             }
             default -> throw new IllegalStateException("highOrLowValue is not part of the Card enum");
         }
+    }
+
+    public void clear() {
+        done = false;
+        bet = 0;
+        beforeSplitCards = new CopyOnWriteArrayList<>();
+        splitCards = new CopyOnWriteArrayList<>();
+        activeCards = new CopyOnWriteArrayList<>();
     }
 
     protected void doSplit() {
@@ -149,10 +164,6 @@ public abstract class Player {
 
     public List<Card> getCards() {
         return activeCards;
-    }
-
-    public List<Card> getBeforeSplitCards() {
-        return beforeSplitCards;
     }
 
     public List<Card> getSplitCards() {
