@@ -47,6 +47,10 @@ public class Blackjack {
         }
     }
 
+    public void newGame() {
+        setupNewGame();
+    }
+
     private RealPlayer getCurrentRealPlayer() {
         for (Player player : players) {
             if (player instanceof RealPlayer) {
@@ -102,6 +106,18 @@ public class Blackjack {
         setupPlayers();
         setupVariables();
         dealStartCards();
+    }
+
+    private void setupNewGame() {
+        setupNewPlayers();
+        setupVariables();
+        dealStartCards();
+    }
+
+    private void setupNewPlayers() {
+        players.remove(1);
+        getCurrentRealPlayer().clear();
+        players.add(new Dealer(mainStack));
     }
 
     private void setupPlayers() {
