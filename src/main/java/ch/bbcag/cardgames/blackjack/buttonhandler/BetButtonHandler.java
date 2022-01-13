@@ -1,15 +1,19 @@
 package ch.bbcag.cardgames.blackjack.buttonhandler;
 
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
+import ch.bbcag.cardgames.gui.scenes.BlackjackScene;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 
 public class BetButtonHandler extends MainButtonHandler{
 
     private TextField amountField;
-    public BetButtonHandler(RealPlayer player, TextField amountField) {
+    private BlackjackScene blackjackScene;
+
+    public BetButtonHandler(RealPlayer player, TextField amountField, BlackjackScene blackjackScene) {
         super(player);
         this.amountField = amountField;
+        this.blackjackScene = blackjackScene;
     }
 
     @Override
@@ -20,9 +24,11 @@ public class BetButtonHandler extends MainButtonHandler{
         } catch (NumberFormatException nfe) {
             return;
         }
-        if (bet != 0 && bet <= player.getMoney()) {
+        if (bet >= 0 && bet <= player.getMoney()) {
             player.setBet(bet);
             player.setMoney(player.getMoney() - player.getBet());
+            blackjackScene.startGame();
+            blackjackScene.setWaitingForMoneySet(false);
         }
     }
 }

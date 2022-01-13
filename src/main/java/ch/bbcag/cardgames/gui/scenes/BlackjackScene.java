@@ -75,7 +75,6 @@ public class BlackjackScene extends BackgroundScene {
 
     private static final double MARGIN_ANCHOR_PANE = 10.0;
     private static final double MARGIN_MONEY_INSERTS = 75.5;
-    private static final double MARGIN_MONEY_LABEL = 100;
     private static final double MARGIN_BUTTONS = 50.0;
 
     private static final double SPACING_IN_H_BOXES = 10;
@@ -99,6 +98,7 @@ public class BlackjackScene extends BackgroundScene {
     private Dealer dealer;
 
     private String winner = "";
+    private boolean waitingForMoneySet = true;
 
     private Application app;
 
@@ -110,11 +110,12 @@ public class BlackjackScene extends BackgroundScene {
     @Override
     public void update(double deltaInSec) {
         setButtonAvailable();
-        updateVariables();
+        if (!waitingForMoneySet) {
+            updateVariables();
+            doWhenPlayerDone();
+        }
         updateMoneyLabel();
-        doWhenPlayerDone();
     }
-
 
     @Override
     public void paint() {
@@ -130,9 +131,15 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     public void newGame() {
+        waitingForMoneySet = true;
         blackjack.newGame();
-        setupVariablesForNewGame();
         hidePlayAgain();
+        setupVariablesForNewGame();
+
+    }
+
+    public void startGame() {
+        blackjack.startGame();
         makeButtonsAvailable();
     }
 
@@ -155,6 +162,7 @@ public class BlackjackScene extends BackgroundScene {
         if (player.isDone()) {
             winner = blackjack.dealersTurn();
             showPlayAgain();
+            makeButtonsUnavailable();
         }
     }
 
@@ -163,15 +171,29 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setButtonAvailable() {
-        if (!player.isSplitPossible()) SPLIT_BUTTON.setButtonNotAvailable();
-        if (!player.canTakeACard()) HIT_BUTTON.setButtonNotAvailable();
-        if (!player.isDoubleDownPossible()) DOUBLE_BUTTON.setButtonNotAvailable();
+        if (waitingForMoneySet) {
+            SET_BUTTON.setButtonAvailable();
+            makeButtonsUnavailable();
+        } else {
+            SET_BUTTON.setButtonNotAvailable();
+            if (!player.isSplitPossible()) SPLIT_BUTTON.setButtonNotAvailable();
+            if (!player.canTakeACard()) HIT_BUTTON.setButtonNotAvailable();
+            if (!player.isDoubleDownPossible()) DOUBLE_BUTTON.setButtonNotAvailable();
+        }
     }
 
     private void makeButtonsAvailable() {
         SPLIT_BUTTON.setButtonAvailable();
+        HOLD_BUTTON.setButtonAvailable();
         HIT_BUTTON.setButtonAvailable();
         DOUBLE_BUTTON.setButtonAvailable();
+    }
+
+    private void makeButtonsUnavailable() {
+        SPLIT_BUTTON.setButtonNotAvailable();
+        HOLD_BUTTON.setButtonNotAvailable();
+        HIT_BUTTON.setButtonNotAvailable();
+        DOUBLE_BUTTON.setButtonNotAvailable();
     }
 
     private void showPlayAgain() {
@@ -210,8 +232,9 @@ public class BlackjackScene extends BackgroundScene {
         hidePlayAgainButton();
         PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA + "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
                 " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + ";");
-        WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
         WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
+
+        WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
 
         WINNER_IS_LABEL.setAlignment(Pos.CENTER);
         CENTER_BORDERPANE.setCenter(WINNER_IS_LABEL);
@@ -270,7 +293,7 @@ public class BlackjackScene extends BackgroundScene {
         HoldButtonHandler holdButtonHandler = new HoldButtonHandler(player);
         HOLD_BUTTON.setOnAction(holdButtonHandler);
 
-        BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD);
+        BetButtonHandler betButtonHandler = new BetButtonHandler(player, INSERT_MONEY_TEXT_FIELD, this);
         SET_BUTTON.setOnAction(betButtonHandler);
 
         ReplayButtonHandler replayButtonHandler = new ReplayButtonHandler(blackjack, this);
@@ -287,23 +310,36 @@ public class BlackjackScene extends BackgroundScene {
     private void drawPlayerCards() {
         double posXPlayerCards = PLAYER_CARDS_INITIAL_X;
         calculatePlayerXIncrement();
-        for (Card card : playerCards) {
-            gc.drawImage(card.getImage(), posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
-            posXPlayerCards += playerXIncrement;
+        if (waitingForMoneySet) {
+            for (int i = 0; i < 2; i++) {
+                gc.drawImage(BACK_CARD_IMAGE, posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
+                posXPlayerCards += playerXIncrement;
+            }
+        } else {
+            for (Card card : playerCards) {
+                gc.drawImage(card.getImage(), posXPlayerCards, POSITION_Y_PLAYER_CARDS, WIDTH_PLAYER_CARDS, HEIGHT_PLAYER_CARDS);
+                posXPlayerCards += playerXIncrement;
+            }
         }
     }
 
     private void drawDealerCards() {
         double posXDealerCards = DEALER_CARDS_INITIAL_X;
         calculateDealerXIncrement();
-        if (!dealer.isDealersTurn()) {
+        if (waitingForMoneySet) {
             gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
             posXDealerCards += dealerXIncrement;
-            gc.drawImage(dealer.getCards().get(1).getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+            gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
         } else {
-            for (Card card : dealerCards) {
-                gc.drawImage(card.getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+            if (!dealer.isDealersTurn()) {
+                gc.drawImage(BACK_CARD_IMAGE, posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
                 posXDealerCards += dealerXIncrement;
+                gc.drawImage(dealer.getCards().get(1).getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+            } else {
+                for (Card card : dealerCards) {
+                    gc.drawImage(card.getImage(), posXDealerCards, POSITION_Y_DEALER_CARDS, WIDTH_DEALER_CARDS, HEIGHT_DEALER_CARDS);
+                    posXDealerCards += dealerXIncrement;
+                }
             }
         }
     }
@@ -327,5 +363,9 @@ public class BlackjackScene extends BackgroundScene {
     private void updateVariables() {
         playerCards = player.getCards();
         dealerCards = dealer.getCards();
+    }
+
+    public void setWaitingForMoneySet(boolean waitingForMoneySet) {
+        this.waitingForMoneySet = waitingForMoneySet;
     }
 }

@@ -51,21 +51,12 @@ public class Blackjack {
         else return "Dealer wins";
     }
 
-    private String listToString(List<String> winners) {
-        String result = "";
-        boolean split = false;
-        for (String winner : winners) {
-            if (split) {
-                result = result + " 2. Game: " + winner;
-            } else result = winner;
-            split = true;
-
-        }
-        return result;
-    }
-
     public void newGame() {
         setupNewGame();
+    }
+
+    public void startGame() {
+        dealStartCards();
     }
 
     private Player findWinner(boolean ofSplit) {
@@ -129,13 +120,11 @@ public class Blackjack {
     private void setupGame() {
         setupPlayers();
         setupVariables();
-        dealStartCards();
     }
 
     private void setupNewGame() {
         setupNewPlayers();
         setupVariables();
-        dealStartCards();
     }
 
     private void setupNewPlayers() {
