@@ -20,7 +20,7 @@ public class Dealer extends Player {
     }
 
     public boolean hasToTakeCard() {
-        return getCount(Count.HIGH, getCards()) <= DEALER_MUST_STAY;
+        return getCount(Count.BEST, getCards()) < DEALER_MUST_STAY;
     }
 
     @Override
