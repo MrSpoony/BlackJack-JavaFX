@@ -8,7 +8,6 @@ public class RealPlayer extends Player {
     private static final int MAX_CARD_VALUE = 21;
     private boolean hit;
 
-    private int money;
 
     public RealPlayer(Stack stack, int money) {
         super(stack);
@@ -47,13 +46,5 @@ public class RealPlayer extends Player {
 
     public void setMoney(int money) {
         this.money = money;
-    }
-
-    public void clear() {
-        done = false;
-        bet = 0;
-        getCards().clear();
-        getSplitCards().clear();
-        getBeforeSplitCards().clear();
     }
 }
