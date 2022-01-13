@@ -12,14 +12,17 @@ import ch.bbcag.cardgames.gui.common.LabelLayout;
 import ch.bbcag.cardgames.gui.common.PositionOfNodes;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class BlackjackScene extends BackgroundScene {
@@ -56,6 +59,7 @@ public class BlackjackScene extends BackgroundScene {
     private static final LabelLayout MONEY_LABEL = new LabelLayout("Money:");
     private static final LabelLayout SUBTOTAL_LABEL = new LabelLayout("Subtotal:");
     private static final LabelLayout INSERT_MONEY_LABEL = new LabelLayout("Your Insert:");
+    private static final LabelLayout WINNER_IS_LABEL = new LabelLayout("");
     private static final TextField INSERT_MONEY_TEXT_FIELD = new TextField("Enter your Money ");
 
     private static final double MONEY_TEXT_FIELD_WIDTH = 150;
@@ -72,6 +76,7 @@ public class BlackjackScene extends BackgroundScene {
     private static final HBox BOTTOM_RIGHT_H_BOX = new HBox();
     private static final HBox TOP_RIGHT_H_BOX = new HBox();
     private static final HBox H_BOX_SET_BUTTON = new HBox();
+    private static final BorderPane CENTER_BORDERPANE = new BorderPane();
 
     private double playerXIncrement = WIDTH_PLAYER_CARDS - 25;
     private double dealerXIncrement = WIDTH_DEALER_CARDS - 25;
@@ -82,6 +87,8 @@ public class BlackjackScene extends BackgroundScene {
     private Blackjack blackjack;
     private RealPlayer player;
     private Dealer dealer;
+
+    private String winner = "";
 
     public BlackjackScene(Navigator navigator) {
         super(navigator);
@@ -94,7 +101,9 @@ public class BlackjackScene extends BackgroundScene {
         updateVariables();
         updateMoneyLabel();
         if (player.isDone()) {
-            blackjack.dealerTurn();
+            winner = blackjack.dealerTurn();
+            WINNER_IS_LABEL.setText(winner);
+
         }
     }
 
@@ -119,6 +128,7 @@ public class BlackjackScene extends BackgroundScene {
     private void setupScene() {
         setupVariables();
         setupButtonHandlers();
+        setupCenterBorderPane();
         setPositionOfNodes();
         setupHBoxes();
         setupAnchorpane();
@@ -144,7 +154,15 @@ public class BlackjackScene extends BackgroundScene {
         INSERT_MONEY_TEXT_FIELD.setPrefSize(MONEY_TEXT_FIELD_WIDTH, MONEY_TEXT_FIELD_HEIGHT);
         ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
         ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, SUBTOTAL_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
-        getGroup().getChildren().add(ANCHOR_PANE);
+        getGroup().getChildren().addAll(CENTER_BORDERPANE, ANCHOR_PANE);
+    }
+
+    private void setupCenterBorderPane(){
+        WINNER_IS_LABEL.setMaxWidth(Double.MAX_VALUE);
+        WINNER_IS_LABEL.setMaxHeight(Double.MAX_VALUE);
+        WINNER_IS_LABEL.setAlignment(Pos.CENTER);
+
+        CENTER_BORDERPANE.setCenter(WINNER_IS_LABEL);
     }
 
     private void setupBottomRightHBox() {

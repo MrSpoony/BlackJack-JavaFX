@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 
 public abstract class BaseScene extends Scene implements Initialization {
 
@@ -22,7 +23,7 @@ public abstract class BaseScene extends Scene implements Initialization {
     private long lastTimeInNanoSec;
 
     public BaseScene(Navigator navigator) {
-        super(new Group());
+        super(new StackPane());
         nav = navigator;
     }
 
@@ -54,8 +55,8 @@ public abstract class BaseScene extends Scene implements Initialization {
 
     public abstract void paint();
 
-    protected Group getGroup() {
-        return (Group) getRoot();
+    protected StackPane getGroup() {
+        return (StackPane) getRoot();
     }
 
     public void onEnter() {

@@ -3,9 +3,11 @@ package ch.bbcag.cardgames.blackjack;
 import ch.bbcag.cardgames.blackjack.players.Dealer;
 import ch.bbcag.cardgames.blackjack.players.Player;
 import ch.bbcag.cardgames.blackjack.players.RealPlayer;
+import ch.bbcag.cardgames.common.cards.Card;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Blackjack {
 
@@ -28,23 +30,59 @@ public class Blackjack {
         setupGame();
     }
 
-    public void dealerTurn() {
+    public String dealerTurn() {
+        List<String> winnerString = new CopyOnWriteArrayList<>();
+        List<Card>tmpPlayerHand;
+        String result;
+
         getCurrentRealPlayer().setDone(false);
         while (!dealer.isDone()) {
             dealer.turn();
         }
         System.out.println("Dealer done");
-        if (!isDraw()) winner = findWinner();
-        else System.out.println("its a draw");
-        getCurrentRealPlayer().setDone(false);
-        System.out.println(winner);
-        if(getCurrentRealPlayer().isSplitHappend){
-            if (!isDraw()) winner = findWinner();
-            else System.out.println("its a draw");
-            getCurrentRealPlayer().setDone(false);
-            System.out.println(winner);
+       winnerString.add(drawOrWin());
+        if(getCurrentRealPlayer().isSplitHappend()){
+            splitVariables();
+            winnerString.add(drawOrWin());
             getCurrentRealPlayer().setSplitHappend(false);
         }
+        result = listToString(winnerString);
+        return result;
+    }
+
+    private void splitVariables() {
+        int counter = 0;
+        List<Card> tmpPlayerHand;
+        tmpPlayerHand = getCurrentRealPlayer().getSplitCards();
+        for(Card card : tmpPlayerHand){
+            counter += card.getValue();
+        }
+        playerHand = counter;
+    }
+
+    private String drawOrWin() {
+        String tmpWinner = "";
+        if (!isDraw()) winner = findWinner();
+        else return "its a draw";
+        getCurrentRealPlayer().setDone(false);
+        System.out.println(winner);
+        if(winner == getCurrentRealPlayer()) tmpWinner = "Player wins";
+        else tmpWinner = "Dealer wins";
+        return tmpWinner;
+    }
+
+    private String listToString(List<String> winners){
+        String result = "";
+        boolean split = false;
+        for(String winner : winners){
+            if(split){
+                result += " 2. Game: " + winner;
+            }
+            else result = winner;
+            split = true;
+
+        }
+        return result;
     }
 
     public void newGame() {
