@@ -1,13 +1,13 @@
 package ch.bbcag.cardgames.gui.common;
 
-import java.awt.*;
+
+import javafx.scene.control.Label;
 
 public class TitleLayout extends Label {
     public TitleLayout(String text){
         super(text);
-        this.setStyle("-fx-text-fill: #000000; -fx-font-size: 25; -fx-font-family: Arial");
+        this.setStyle("-fx-text-fill: #000000; -fx-font-size: 46; -fx-font-family: 'Perpetua Titling MT'; ");
     }
 
-    private void setStyle(String s) {
-    }
+
 }
