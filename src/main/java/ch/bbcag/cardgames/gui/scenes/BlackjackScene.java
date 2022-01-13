@@ -67,7 +67,6 @@ public class BlackjackScene extends BackgroundScene {
     private static final TransparentButton PLAY_AGAIN_BUTTON = new TransparentButton("Play again?");
 
     private static final LabelLayout MONEY_LABEL = new LabelLayout("Money:");
-    private static final LabelLayout INSERT_MONEY_LABEL = new LabelLayout("Your Insert:");
     private static final LabelLayout WINNER_IS_LABEL = new LabelLayout("");
     private static final TextField INSERT_MONEY_TEXT_FIELD = new TextField("Enter your Money ");
 
@@ -204,7 +203,7 @@ public class BlackjackScene extends BackgroundScene {
     private void setupAnchorPane() {
         INSERT_MONEY_TEXT_FIELD.setPrefSize(MONEY_TEXT_FIELD_WIDTH, MONEY_TEXT_FIELD_HEIGHT);
         ANCHOR_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
-        ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, INSERT_MONEY_TEXT_FIELD, INSERT_MONEY_LABEL, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
+        ANCHOR_PANE.getChildren().addAll(MONEY_LABEL, INSERT_MONEY_TEXT_FIELD, BOTTOM_RIGHT_H_BOX, TOP_RIGHT_H_BOX, H_BOX_SET_BUTTON);
     }
 
     private void setupEndScreen() {
@@ -236,8 +235,7 @@ public class BlackjackScene extends BackgroundScene {
     }
 
     private void setPositionOfNodes() {
-        PositionOfNodes.setAllFourPositions(MONEY_LABEL, HELP_BUTTON, INSERT_MONEY_LABEL, MARGIN_ANCHOR_PANE);
-        PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_LABEL, MARGIN_MONEY_LABEL, MARGIN_MONEY_INSERTS);
+        PositionOfNodes.setAllFourPositions(MONEY_LABEL, HELP_BUTTON, MARGIN_ANCHOR_PANE);
         PositionOfNodes.setBottomRightForSpecials(INSERT_MONEY_TEXT_FIELD, MARGIN_MONEY_INSERTS, MARGIN_BUTTONS);
         PositionOfNodes.setBottomRightLbl(BOTTOM_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
         PositionOfNodes.setTopRightLbl(TOP_RIGHT_H_BOX, MARGIN_ANCHOR_PANE);
