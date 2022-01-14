@@ -34,25 +34,29 @@ So if you are really low on memory you could replace -Xmx2024m with -Xmx1024m
 But on most machines you don't even need to do this.
 
 ## Test Cases
-We didn't test anything with JUnit, we just tested with Users, because its a game, and
-we would let a dealer play against a dealer if that would be the case.
+Source version v1.0.0
+We didn't test anything with the library JUnit. We just tested with Users, because its a game,
+which has some randomness involved (shuffling the stack).
 
-We tested on Windows and on Linux, since Marco and Simeon used Windows, and Kimi was using Linux.
-We tested with Java version 8 Update 311.
+But if we would test to do so, we would try to make a dealer
+(player with the rules, which a dealer has) play against another dealer.
+
+We tested our game on Windows and on Linux, since Marco and Simeon used Windows, and Kimi was using Linux -> Arch btw.
+We tested with Java Runtime version 8 Update 311.
 
 TestID | Preparations | Description | Expected result
---- | --- | -------| ---| 
-T-01 | Startscreen working | If the user clicks on the diamond-ace, he will be redirected to the blackjack-game | Scene changes to the "blackjacktable", where the user can play blackjack.
-T-02 | Hitbutton working | If the user clicks on the "Hit" button, he will get another card| another card gets in the userhand and the user still can hit or hold.
-T-03 | Holdbutton working| If the user clicks on the "Hold" button, the dealer makes his turn| dealer does his turn, winner gets calculated, if the player wins, he gets his bet and winnings, else he loses his bet.
-T-04 | Splitbutton working, 2 times same card, didn't hit yet|The player will get the second hand cards after holding. | If the user clicks on the "Split" button, he will get another hand, and he plays with both hands against the dealer, winner of both games get announced.
-T-05 | Textfield working, "Set" button working | If the player enters an amount and presses the "Set" button, the amount will be set| The amount entered will be set, and will be doubled if the player wins.
-T-06 | Doublebutton working, hasn't hit yet| If the user clicks on the "Double" button, he will get a card and pays his bet again| Bet gets doubled, the user gets another card. If the user wins, the winnings will be doubled too.
-T-07 | Help button working, internet connection is active | The user can get help from the web | The user will get a browsertab, which contain the rules of blackjack, and how he should play.
+--- | --- | -------| --- | 
+T-01 | Game started | If the user clicks on the diamond-ace, he will be redirected to the blackjack-game | Scene changes to the "blackjacktable", where the user can play blackjack.
+T-02 | Blackjack must be selected | If the user enters an amount and presses the "Set" button, the amount will be set and cards get revealed | The amount entered will be set, and will be doubled and returned if the user wins, aswell as the cards get revealed to the user.
+T-03 | Bet placed | If the user clicks on the "Hit" button, he will get another card | Another card gets in the userhand and the user still can hit or hold.
+T-04 | User doesn't wanna hit anymore | If the user clicks on the "Hold" button, the dealer makes his turn | Dealer does his turn, winner gets calculated, if the user wins, he gets his bet and winnings, else he loses his bet.
+T-05 | 2 times the same card and didn't hit yet |If the user uses the "Split" button, the user will get the second hand cards after holding. | The user will get another hand of cards, after he holded with the first one and he plays with both hands against the dealer. The winners of both games get announced.
+T-06 | hasn't hit yet | If the user clicks on the "Double" button, he will get a card and pays his bet again | Bet gets doubled, the user gets another card. If the user wins, the winnings will be doubled too.
+T-07 | internet connection is active, in blackjackscene | The user can get help from the web, through clicking on the "Help" button | The user will get a browsertab, which contain the rules of blackjack, and how he should play.
 
-TestID | Succesful | Comments
+TestID | Successful | Comments
 --- | --- | --- |
-T-01 | Yes | -
+T-01 | Yes | You have to wait a few seconds, but it works.
 T-02 | Yes | Works perfectly fine
 T-03 | Yes | Must be pressed if the user doesnt press double.
 T-04 | Yes | It works.
