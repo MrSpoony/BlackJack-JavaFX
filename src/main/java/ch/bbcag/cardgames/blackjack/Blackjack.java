@@ -6,7 +6,6 @@ import ch.bbcag.cardgames.blackjack.players.RealPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Blackjack {
 
@@ -40,14 +39,14 @@ public class Blackjack {
         if (realPlayer.isSplitHappened()) {
             System.out.println("in there");
             playerHand = realPlayer.getCount(Count.BEST, realPlayer.getSplitCards());
-            winnerString = winnerString + "\nand for split\n" + drawOrWin(true).toLowerCase(Locale.ROOT);
+            winnerString = winnerString + "\nand for split\n" + drawOrWin(true).toLowerCase();
             realPlayer.setSplitHappened(false);
         }
         return winnerString;
     }
 
     private String drawOrWin(boolean ofSplit) {
-        if (!isDraw()) winner = findWinner(ofSplit);
+        if (!isDraw(ofSplit)) winner = findWinner(ofSplit);
         else {
             realPlayer.setMoney(realPlayer.getMoney() + realPlayer.getBet());
             return "It's a draw";
@@ -95,12 +94,20 @@ public class Blackjack {
         realPlayer.setBet(0);
     }
 
-    private boolean isAmountTheSame() {
-        return PLAYERS.get(PLAYERS.size() - 1).getCount(Count.BEST, dealer.getCards()) == realPlayer.getCount(Count.BEST, realPlayer.getCards());
+    private boolean isAmountTheSame(boolean ofSplit) {
+        if (ofSplit) {
+            return PLAYERS.get(PLAYERS.size() - 1).getCount(Count.BEST, dealer.getCards()) == playerHand;
+        } else {
+            return PLAYERS.get(PLAYERS.size() - 1).getCount(Count.BEST, dealer.getCards()) == realPlayer.getCount(Count.BEST, realPlayer.getCards());
+        }
     }
 
-    private boolean isDraw() {
-        return isAmountTheSame() && realPlayer.getCount(Count.BEST, realPlayer.getCards()) < VALUE_TO_WIN + 1;
+    private boolean isDraw(boolean ofSplit) {
+        if (ofSplit) {
+            return isAmountTheSame(true) && playerHand < VALUE_TO_WIN + 1;
+        } else {
+            return isAmountTheSame(false) && realPlayer.getCount(Count.BEST, realPlayer.getCards()) < VALUE_TO_WIN + 1;
+        }
     }
 
     private void setupVariables() {
