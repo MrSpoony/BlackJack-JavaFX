@@ -26,11 +26,11 @@ that have not that much memory you sometimes need to give the Jar file more memo
 You can do this with
 
 ```bash
-java -Xmx2048m -jar PATH_TO_YOUR_JAR_FILE.jar
+java -Xmx3072m -jar PATH_TO_YOUR_JAR_FILE.jar
 ```
 
-We were already able to run it with only 1Gb of memory.
-So if you are really low on memory you could replace -Xmx2024m with -Xmx1024m
+We were already able to run it with only 2Gb of memory.
+So if you are really low on memory you could replace -Xmx2024m with -Xmx2048m
 But on most machines you don't even need to do this.
 
 ## Test Cases
@@ -41,7 +41,8 @@ which has some randomness involved (shuffling the stack).
 But if we would test to do so, we would try to make a dealer
 (player with the rules, which a dealer has) play against another dealer.
 
-We tested our game on Windows and on Linux, since Marco and Simeon used Windows, and Kimi was using Linux -> Arch btw.
+We tested our game on Windows and on Linux, since Marco and Simeon used Windows,
+and Kimi was using Linux -> Arch btw.
 We tested with Java Runtime version 8 Update 311.
 
 TestID | Preparations | Description | Expected result
