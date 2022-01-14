@@ -1,6 +1,5 @@
 package ch.bbcag.cardgames.gui.scenes;
 
-
 import ch.bbcag.cardgames.blackjack.Blackjack;
 import ch.bbcag.cardgames.blackjack.buttonhandler.*;
 import ch.bbcag.cardgames.blackjack.players.Dealer;
@@ -11,6 +10,7 @@ import ch.bbcag.cardgames.common.scene.Navigator;
 import ch.bbcag.cardgames.gui.common.LabelLayout;
 import ch.bbcag.cardgames.gui.common.PositionOfNodes;
 import ch.bbcag.cardgames.gui.common.TransparentButton;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -24,7 +24,6 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 public class BlackjackScene extends BackgroundScene {
 

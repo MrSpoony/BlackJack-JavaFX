@@ -5,6 +5,7 @@ import ch.bbcag.cardgames.common.scene.Navigator;
 import ch.bbcag.cardgames.common.scene.SceneType;
 import ch.bbcag.cardgames.gui.common.TextLayout;
 import ch.bbcag.cardgames.gui.common.TitleLayout;
+
 import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -13,9 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.transform.Rotate;
 
-
 import java.util.Objects;
-
 
 public class StartScene extends BackgroundScene {
 

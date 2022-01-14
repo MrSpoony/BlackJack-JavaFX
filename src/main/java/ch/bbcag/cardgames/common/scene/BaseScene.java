@@ -1,6 +1,7 @@
 package ch.bbcag.cardgames.common.scene;
 
 import ch.bbcag.cardgames.common.eventhandler.KeyEventHandler;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;

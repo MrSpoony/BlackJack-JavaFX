@@ -1,6 +1,5 @@
 package ch.bbcag.cardgames;
 
-
 import javafx.application.Application;
 
 public class Launcher {

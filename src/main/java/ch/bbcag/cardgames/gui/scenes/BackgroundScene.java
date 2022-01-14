@@ -2,6 +2,7 @@ package ch.bbcag.cardgames.gui.scenes;
 
 import ch.bbcag.cardgames.common.scene.BaseScene;
 import ch.bbcag.cardgames.common.scene.Navigator;
+
 import javafx.scene.image.Image;
 
 import java.util.Objects;

@@ -1,6 +1,7 @@
 package ch.bbcag.cardgames.common.cards;
 
 import ch.bbcag.cardgames.common.cards.enums.Face;
+
 import javafx.scene.image.Image;
 
 import java.util.Objects;
