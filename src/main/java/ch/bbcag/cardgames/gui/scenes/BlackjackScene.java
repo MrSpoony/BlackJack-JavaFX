@@ -137,7 +137,6 @@ public class BlackjackScene extends BackgroundScene {
         blackjack.newGame();
         hidePlayAgain();
         setupVariablesForNewGame();
-
     }
 
     public void startGame() {
@@ -241,15 +240,19 @@ public class BlackjackScene extends BackgroundScene {
 
     private void setupEndScreen() {
         hidePlayAgainButton();
-        PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA + "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
-                " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + ";");
-        WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
+        setStyleofPlayAgainScene();
 
         WIN_SCREEN_V_BOX.getChildren().addAll(CENTER_BORDERPANE, PLAY_AGAIN_BUTTON);
 
         WINNER_IS_LABEL.setAlignment(Pos.CENTER);
         CENTER_BORDERPANE.setCenter(WINNER_IS_LABEL);
         WIN_SCREEN_V_BOX.setAlignment(Pos.CENTER);
+    }
+
+    private void setStyleofPlayAgainScene() {
+        PLAY_AGAIN_BUTTON.setStyle("-fx-background-color:rgba(" + PLAY_AGAIN_BUTTON_RGBA + "); -fx-text-fill: " + PLAY_AGAIN_BUTTON_TEXT_RGB + ";" +
+                " -fx-font-size: " + PLAY_AGAIN_BUTTON_TEXT_SIZE + "; -fx-max-height: " + PLAY_AGAIN_BUTTON_MAX_HEIGHT + ";");
+        WINNER_IS_LABEL.setStyle("-fx-text-fill: rgba(" + WINNER_IS_LABEL_RGBA + "); -fx-font-size: " + WINNER_IS_TEXT_SIZE + "; -fx-font-family: Arial");
     }
 
     private void setGUI() {

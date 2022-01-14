@@ -20,23 +20,23 @@ import java.util.Objects;
 
 public class StartScene extends BackgroundScene {
 
-    private static final String IMAGE_PATH_FROM_AS = "/pokerdeck/AS.png";
-    private static final String IMAGE_PATH_FROM_AC = "/pokerdeck/AC.png";
-    private static final String IMAGE_PATH_FROM_AH = "/pokerdeck/AH.png";
-    private static final String IMAGE_PATH_FROM_AD = "/pokerdeck/AD.png";
+    private static final String IMAGE_PATH_SPADES = "/pokerdeck/AS.png";
+    private static final String IMAGE_PATH_CLUBS = "/pokerdeck/AC.png";
+    private static final String IMAGE_PATH_HEARTS = "/pokerdeck/AH.png";
+    private static final String IMAGE_PATH_DIAMONDS = "/pokerdeck/AD.png";
     private static final String IMAGE_PATH_ARROW = "/objects/arrow.png";
 
-    private static final int POS_X_FOR_AC = 250;
-    private static final int POS_Y_FOR_AC = 120;
+    private static final int POS_X_CLUBS = 250;
+    private static final int POS_Y_CLUBS = 120;
 
-    private static final int POS_X_FOR_AS = 210;
-    private static final int POS_Y_FOR_AS = 290;
+    private static final int POS_X_SPADES = 210;
+    private static final int POS_Y_SPADES =  290;
 
-    private static final int POS_X_FOR_AH = 100;
-    private static final int POS_Y_FOR_AH = 420;
+    private static final int POS_X_HEARTS = 100;
+    private static final int POS_Y_HEARTS = 420;
 
-    private static final int POS_X_FOR_AD = 600;
-    private static final int POS_Y_FOR_AD = 580;
+    private static final int POS_X_DIAMONDS = 600;
+    private static final int POS_Y_DIAMONDS = 580;
 
     private static final double WIDTH_CARD = 250;
     private static final double HEIGHT_CARD = 350;
@@ -49,10 +49,10 @@ public class StartScene extends BackgroundScene {
     private static final int ANGLE_AC = -30;
     private static final int ANGLE_AH = 30;
 
-    private static final Image as = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AS)));
-    private static final Image ac = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AC)));
-    private static final Image ah = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AH)));
-    private static final Image ad = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_FROM_AD)));
+    private static final Image as = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_SPADES)));
+    private static final Image ac = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_CLUBS)));
+    private static final Image ah = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_HEARTS)));
+    private static final Image ad = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_DIAMONDS)));
     private static final Image arrow = new Image(Objects.requireNonNull(BackgroundScene.class.getResourceAsStream(IMAGE_PATH_ARROW)));
 
     private static final TextLayout BLACKJACK = new TextLayout("Blackjack");
@@ -79,9 +79,9 @@ public class StartScene extends BackgroundScene {
     }
 
     private void drawImages() {
-        drawRotatedImage(gc, ac, ANGLE_AC, POS_X_FOR_AC, POS_Y_FOR_AC);
-        drawRotatedImage(gc, as, 0, POS_X_FOR_AS, POS_Y_FOR_AS);
-        drawRotatedImage(gc, ah, ANGLE_AH, POS_X_FOR_AH, POS_Y_FOR_AH);
+        drawRotatedImage(gc, ac, ANGLE_AC, POS_X_CLUBS, POS_Y_CLUBS);
+        drawRotatedImage(gc, as, 0, POS_X_SPADES, POS_Y_SPADES);
+        drawRotatedImage(gc, ah, ANGLE_AH, POS_X_HEARTS, POS_Y_HEARTS);
 
         gc.drawImage(arrow, POS_X_Y_ARROW, POS_X_Y_ARROW);
     }
@@ -99,8 +99,8 @@ public class StartScene extends BackgroundScene {
         asForBlackJack.setFitHeight(HEIGHT_CARD);
         asForBlackJack.setFitWidth(WIDTH_CARD);
         BTN_1_CARD.setGraphic(asForBlackJack);
-        BTN_1_CARD.setLayoutX(POS_X_FOR_AD);
-        BTN_1_CARD.setLayoutY(POS_Y_FOR_AD);
+        BTN_1_CARD.setLayoutX(POS_X_DIAMONDS);
+        BTN_1_CARD.setLayoutY(POS_Y_DIAMONDS);
         BTN_1_CARD.setOnAction(e -> nav.navigateTo(SceneType.BLACKJACK));
     }
 
