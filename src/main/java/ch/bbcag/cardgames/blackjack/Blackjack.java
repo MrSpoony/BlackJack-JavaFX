@@ -37,7 +37,6 @@ public class Blackjack {
         }
         winnerString = drawOrWin(false);
         if (realPlayer.isSplitHappened()) {
-            System.out.println("in there");
             playerHand = realPlayer.getCount(Count.BEST, realPlayer.getSplitCards());
             winnerString = winnerString + "\nand for split\n" + drawOrWin(true).toLowerCase();
             realPlayer.setSplitHappened(false);
