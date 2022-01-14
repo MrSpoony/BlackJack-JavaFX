@@ -53,3 +53,12 @@ T-07 | Help button working, internet connection is active | The user can get hel
 
 ## Conclusion
 
+Fortunately, we were able to deliver our project on time. 
+Everyone had a task (Kimi = allrounder, Simeon = backend, Marco = frontend) and had to complete it.
+So we were able to move forward very efficiently and well. 
+If someone had a question, we first asked each other in our group. 
+If we had no idea at all, we asked our coach. 
+We are also very satisfied with our program and were able to do everything.
+
+
+
