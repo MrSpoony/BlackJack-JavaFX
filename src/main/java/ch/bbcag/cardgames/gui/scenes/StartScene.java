@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 
 
@@ -30,7 +29,7 @@ public class StartScene extends BackgroundScene {
     private static final int POS_Y_CLUBS = 120;
 
     private static final int POS_X_SPADES = 210;
-    private static final int POS_Y_SPADES =  290;
+    private static final int POS_Y_SPADES = 290;
 
     private static final int POS_X_HEARTS = 100;
     private static final int POS_Y_HEARTS = 420;
@@ -58,7 +57,6 @@ public class StartScene extends BackgroundScene {
     private static final TextLayout BLACKJACK = new TextLayout("Blackjack");
     private static final TitleLayout CARD_GAMES = new TitleLayout("Select Game: ");
     private static final BorderPane MAIN_BORDER_PANE = new BorderPane();
-    private static final VBox MAIN_VBOX = new VBox();
 
     private static final Button BTN_1_CARD = new Button("");
 
@@ -105,20 +103,14 @@ public class StartScene extends BackgroundScene {
     }
 
     private void setupBorderPane() {
-        setupVBox();
         MAIN_BORDER_PANE.setPrefSize(BaseScene.SCREEN_WIDTH, BaseScene.SCREEN_HEIGHT);
         MAIN_BORDER_PANE.setPadding(new Insets(0, RIGHT_INSETS, 0, LEFT_INSETS));
         MAIN_BORDER_PANE.setRight(BLACKJACK);
         MAIN_BORDER_PANE.setTop(CARD_GAMES);
 
 
-        MAIN_BORDER_PANE.getChildren().addAll(BTN_1_CARD, MAIN_VBOX);
+        MAIN_BORDER_PANE.getChildren().addAll(BTN_1_CARD);
         getStackPane().getChildren().add(MAIN_BORDER_PANE);
-    }
-
-    private void setupVBox() {
-        MAIN_VBOX.getChildren().addAll(BLACKJACK, CARD_GAMES);
-        MAIN_VBOX.setSpacing(100);
     }
 
     private void drawRotatedImage(GraphicsContext gc, Image image, double angle, double posX, double posY) {
