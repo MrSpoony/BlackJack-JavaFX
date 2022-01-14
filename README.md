@@ -50,6 +50,15 @@ T-05 | Textfield working, "Set" button working | If the player enters an amount 
 T-06 | Doublebutton working, hasn't hit yet| If the user clicks on the "Double" button, he will get a card and pays his bet again| Bet gets doubled, the user gets another card. If the user wins, the winnings will be doubled too.
 T-07 | Help button working, internet connection is active | The user can get help from the web | The user will get a browsertab, which contain the rules of blackjack, and how he should play.
 
+TestID | Succesful | Comments
+--- | --- | --- |
+T-01 | Yes | -
+T-02 | Yes | Works perfectly fine
+T-03 | Yes | Must be pressed if the user doesnt press double.
+T-04 | Yes | It works.
+T-05 | Yes | I got the right output.
+T-06 | Yes | Works like it's intended to do.
+T-07 | Yes | Works great.
 
 ## Conclusion
 
@@ -59,6 +68,3 @@ So we were able to move forward very efficiently and well.
 If someone had a question, we first asked each other in our group. 
 If we had no idea at all, we asked our coach. 
 We are also very satisfied with our program and were able to do everything.
-
-
-
